@@ -9,9 +9,10 @@ from tqdm import tqdm
 
 def paser_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--id", default='4ba6df38cb5d43569bf14bee24682c9f', type=str, help="client_id")
-    parser.add_argument("--secret", default="67499f1d094e4e3bb3d920b100c0189d", type=str, help="client_secret")
-    parser.add_argument("--base_df", default="./data/song_artist.csv", type=str, help="csv name")
+    parser.add_argument("--id", default='7fd16ed6bc6646e689486e3d43af2b91', type=str, help="client_id")
+    parser.add_argument("--secret", default="8e86948aff20452c87706cc6100686af", type=str, help="client_secret")
+    parser.add_argument("--base_df", default="./data/song_artist_part_2.csv", type=str, help="csv name")
+    parser.add_argument("--end_df", default="./data/searched_df_part_2.csv", type=str, help="csv name")
     args = parser.parse_args()
     return args
 
@@ -46,19 +47,33 @@ def search_with_query(
     APIBASE = "https://api.spotify.com/v1/search"
     query_and = quote(f"{artist_name} {track_name} ")
     query_or = quote(f"{artist_name}|{track_name} ")
-    searched_tracks = None
     
     try:
         response = requests.get(
             f"{APIBASE}?q={query_and}&type=track&market={market}",
         headers=headers)
+            
+    except requests.exceptions.Timeout as timeout:
+        print("Timeout Error : ", timeout)
+        
+    except requests.exceptions.ConnectionError as connect:
+        print("Error Connecting : ", connect)
+           
+    except requests.exceptions.HTTPError as http:
+        print("Http Error : ", http)
+        
+    except requests.exceptions.InvalidURL as url:
+        print("Http Error : ", url)
+
+    # Any Error except upper exception
+    except requests.exceptions.RequestException as re:
+        print("AnyException : ", re)
+        
     except:
         print("API limit Error")
         raise ValueError("API limit Error")
-
-    # Extract the search results from the response
-    searched_tracks = response.json()["tracks"]["items"]
-    return searched_tracks
+    
+    return response
 
 
 def create_df(headers, base_df):
@@ -67,37 +82,45 @@ def create_df(headers, base_df):
         "searched_track_name",
         "searched_track_id",
         "searched_preview_url",
-        "is_searched",
         ])
     for track_name, artist_name in tqdm(zip(base_df.song, base_df.kakao_artist)):
-        searched_tracks = search_with_query(headers, track_name, artist_name)
+        response = search_with_query(headers, track_name, artist_name)
         
-        searched_track_name = track_name
-        searched_track_artist = artist_name
-        searched_track_id = "None"
-        searched_preview_url = "None"
+        searched_sr = pd.Series(
+            {
+                "searched_track_name": track_name, 
+                "searched_track_artist": artist_name, 
+                "searched_track_id": 'None', 
+                "searched_preview_url": 'None',
+                }
+            )
         
         # 검색결과가 없거나, 다른 음원이 의심될 때 예외 처리
-        if ( searched_track_artist.lower() != artist_name.lower() \
-            and searched_track_name.lower() != track_name.lower() 
-            ) \
-                or searched_tracks == []:
-            is_searched = False
-        else:
-            is_searched = True
-            searched_track_name = searched_tracks[0]["name"]
-            searched_track_artist = searched_tracks[0]["artists"][0]["name"]
-            searched_track_id = searched_tracks[0]["id"]
-            searched_preview_url = searched_tracks[0]["preview_url"]
+        if response.status_code == 400:
+            searched_df.loc[len(searched_df)] = searched_sr
+            continue
+    
+        searched_tracks = response.json()["tracks"]["items"]
         
-
+        if searched_tracks == []:
+            searched_df.loc[len(searched_df)] = searched_sr
+            continue
+        
+        searched_track_name = searched_tracks[0]["name"]
+        searched_track_artist = searched_tracks[0]["artists"][0]["name"]
+        searched_track_id = searched_tracks[0]["id"]
+        searched_preview_url = searched_tracks[0]["preview_url"]
+        
+        if searched_track_artist.lower() != artist_name.lower() and searched_track_name.lower() != track_name.lower():
+            searched_df.loc[len(searched_df)] = searched_sr
+            continue
+        
         searched_df.loc[len(searched_df)] = pd.Series(
             {
                 "searched_track_name": searched_track_name, 
                 "searched_track_artist": searched_track_artist, 
                 "searched_track_id": searched_track_id, 
                 "searched_preview_url": searched_preview_url,
-                "is_searched": is_searched,
                 }
             )
     return searched_df
@@ -107,6 +130,6 @@ if __name__ == '__main__':
     args = paser_args()
     headers = set_headers(args)
     song_artist_df = pd.read_csv(args.base_df)
-    searched_df = create_df(headers, song_artist_df[:100])
-    searched_df.to_csv("./data/searched_df.csv")
+    searched_df = create_df(headers, song_artist_df)
+    searched_df.to_csv(args.end_df)
 
