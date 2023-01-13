@@ -45,7 +45,9 @@ def search_with_query(
     market:str = 'kr'):
     
     APIBASE = "https://api.spotify.com/v1/search"
-    query_and = quote(f"{artist_name} {track_name} ")
+    artist_q = '%20'.join(artist_name.split())
+    track_q = '%20'.join(track_name.split())
+    query_and = f"{artist_q}%20{track_q}"
     query_or = quote(f"{artist_name}|{track_name} ")
     
     try:
@@ -115,11 +117,28 @@ def create_df(headers, base_df):
             searched_df.loc[len(searched_df)] = search_except(track_name=track_name, artist_name=artist_name, search_except='vacant item')
             continue
         
-        searched_track_name = searched_tracks[0]["name"]
-        searched_track_artist = searched_tracks[0]["artists"][0]["name"]
-        searched_track_id = searched_tracks[0]["id"]
-        searched_preview_url = searched_tracks[0]["preview_url"]
+        searched_track_name = pd.json_normalize(searched_tracks)['name']
+        searched_track_artist = pd.json_normalize(searched_tracks, record_path='artists')['name']
+        searched_track_id = pd.json_normalize(searched_tracks)['id']
+        searched_preview_url = pd.json_normalize(searched_tracks)['preview_url']
+
+        index_list = []
+        idx = 0
+        for searched_track_name, searched_track_artist, searched_track_id, searched_preview_url \
+        in zip(searched_track_name, searched_track_artist, searched_track_id, searched_preview_url):
+            if searched_track_name==track_name and searched_track_artist==artist_name:
+                if searched_track_id is not None and searched_preview_url is not None:
+                    index_list.append(idx)
+                    continue
+                index_list.append(idx)
+            idx += 1
         
+        if len(index_list) > 0:
+            searched_track_name = pd.json_normalize(searched_tracks)['name'][index_list[-1]]
+            searched_track_artist = pd.json_normalize(searched_tracks, record_path='artists')['name'][index_list[-1]]
+            searched_track_id = pd.json_normalize(searched_tracks)['id'][index_list[-1]]
+            searched_preview_url = pd.json_normalize(searched_tracks)['preview_url'][index_list[-1]]
+
         if searched_track_artist.lower() != artist_name.lower() and searched_track_name.lower() != track_name.lower():
             searched_df.loc[len(searched_df)] = search_except(track_name=track_name, artist_name=artist_name, search_except='not matched')
             continue
