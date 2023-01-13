@@ -7,7 +7,6 @@ import axios from 'axios';
 // import "./spotifyAPI/spotify.module.css"
 // import "./main_css/test_main.module.css";
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
-import WebPlayback from "./webPlayBack"
 
 
 const Search = () => {
@@ -129,9 +128,6 @@ const Search = () => {
               <Link className="nav_link" id="result_page" to="/result">
                     RESULT
               </Link>
-              <Routes>
-                <Route path="/result" element={<WebPlayback {...trackDetail} token={token}/>}></Route>
-              </Routes>
             </div>
           </div>
       </form>
