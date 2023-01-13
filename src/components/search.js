@@ -4,7 +4,11 @@ import Listbox from './spotifyAPI/Listbox';
 import Detail from './spotifyAPI/Detail';
 import { Credentials } from './spotifyAPI/Credentials';
 import axios from 'axios';
-import "./main_css/main.module.css";
+// import "./spotifyAPI/spotify.module.css"
+// import "./main_css/test_main.module.css";
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
+import WebPlayback from "./webPlayBack"
+
 
 const Search = () => {
   
@@ -15,6 +19,8 @@ const Search = () => {
   const [playlist, setPlaylist] = useState({selectedPlaylist: '', listOfPlaylistFromAPI: []});
   const [tracks, setTracks] = useState({selectedTrack: '', listOfTracksFromAPI: []});
   const [trackDetail, setTrackDetail] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
 
@@ -38,8 +44,7 @@ const Search = () => {
           selectedGenre: genres.selectedGenre,
           listOfGenresFromAPI: genreResponse.data.categories.items
         })
-      });
-      
+      })
     });
 
   }, [genres.selectedGenre, spotify.ClientId, spotify.ClientSecret]); 
@@ -97,6 +102,8 @@ const Search = () => {
 
     setTrackDetail(trackInfo[0].track);
 
+    console.log("trackInfo[0].track : ", trackInfo[0].track)
+
 
 
   }
@@ -116,14 +123,19 @@ const Search = () => {
               </button>
             </div>
             <div className="row">
+              
               <Listbox items={tracks.listOfTracksFromAPI} clicked={listboxClicked} />
               {trackDetail && <Detail {...trackDetail} /> }
-            </div>        
+              <Link className="nav_link" id="result_page" to="/result">
+                    RESULT
+              </Link>
+              <Routes>
+                <Route path="/result" element={<WebPlayback {...trackDetail} token={token}/>}></Route>
+              </Routes>
+            </div>
           </div>
       </form>
     </div>
-    
-    
   );
 }
 

@@ -9,7 +9,6 @@ import { sendToVercelAnalytics } from './vitals';
 import { TimelineMax, TweenMax, Power2, Expo, Elastic } from "gsap/all";
 import $ from "jquery";
 
-
 ReactDOM.render(
   <React.StrictMode>
     <App />
@@ -190,8 +189,8 @@ $('.item').click(function(){
 	// Hide
 	mainToPlaylist.to($('#curator'), 0.8, {display: 'none', opacity: 0, scale: 1.1, ease: Power2.easeInOut}, 0)
 			
-	// mainToPlaylist.fromTo($('.curator_list'), 0.5, {opacity: 1, display: 'block', x: 0},
-	// 									{opacity: 0, x: 30, display: 'none', ease: Power2.easeInOut}, 0.5),
+	mainToPlaylist.fromTo($('.curator_list'), 0.5, {opacity: 1, display: 'block', x: 0},
+										{opacity: 0, x: 30, display: 'none', ease: Power2.easeInOut}, 0.5)
 	
 });
 
@@ -240,7 +239,7 @@ $('.back_btn').click(function(){
 // ===== Search Music Page Click=====
 $("#search_music_page").click(function(){
 	var search = new TimelineMax({});
-
+ 
 	// Hide
 	search.to($('.text-wrap'), 0.5, {display: 'none', opacity: 0, y: -20, ease: Power2.easeInOut}, 0);
 	
@@ -257,10 +256,12 @@ $("#search_music_page").click(function(){
 	search.fromTo($('.submit_buttom'), 0.8, {opacity: 0, x: 30},
 										{opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
 
-	// TweenMax.to(".dim", 0.5, {opacity: 0, display: 'none', ease: Power2.easeInOut});
-	// TweenMax.to(".nav", 0.5, {xPercent: -100, display:'none', ease: Expo.easeOut});
-	// $('.logo-text').css({'opacity': '1', 'display': 'block'});										
-		
+	search.fromTo($('.drop_down_div'), 0.8, {opacity: 0, display: 'none', x: 30},
+										{opacity: 1, x: 0, display: 'block', ease: Power2.easeInOut}, 1.2);								
+
+	TweenMax.to(".dim", 0.5, {opacity: 0, display: 'none', ease: Power2.easeInOut});
+	TweenMax.to(".nav", 0.5, {xPercent: -100, display:'none', ease: Expo.easeOut});
+	$('.logo-text').css({'opacity': '1', 'display': 'block'});							
 });
 
 
@@ -279,8 +280,6 @@ $("#home_page").click(function(){
 	mainToHome.to($('#drop_down'), 0, {display: 'none', ease: Power2.easeInOut}, 1);
 
 
-
-
 	// Background Up
 	mainToHome.to($('.wave-container'), 1, {yPercent: 0, ease: Power2.easeInOut}, 1);
 
@@ -293,4 +292,26 @@ $("#home_page").click(function(){
 	mainToHome.fromTo($('.text-wrap .text'), 0.1, {y: 0.1, position: 'absolute'},
 										{y: 0, position: 'relative', ease: Power2.easeInOut}, 1.3);							
 		
+});
+
+$(".result_page").click(function(){
+	var result = new TimelineMax({});
+
+	// Hide
+	result.to($('.list_box'), 0.5, {display: 'none', opacity: 0, y: -20, ease: Power2.easeInOut}, 0);
+	result.to($('.submit_buttom'), 0.5, {display: 'none', opacity: 0, y: -20, ease: Power2.easeInOut}, 0);
+	result.to($('.drop_down_div'), 0.5, {display: 'none', opacity: 0, y: -20, ease: Power2.easeInOut}, 0);
+
+	// Background down
+	result.to($('.wave-container'), 1, {yPercent: 30, ease: Power2.easeInOut}, 0);
+
+
+	// Show
+	$('#playList').css('display', 'block');
+
+	result.fromTo($('.iframe playlist'), 0.8, {opacity: 0, x: 30},
+										{opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
+		
+	result.fromTo($('.play_list_cls'), 0.8, {opacity: 0, display: 'none', x: 30},
+									{opacity: 1, x: 0, display: 'block', ease: Power2.easeInOut}, 1.2);
 });

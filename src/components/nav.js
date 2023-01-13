@@ -10,7 +10,6 @@ const Navigation = (e) => {
             Home
           </Link>
         </li>
-        <li>{/* <Link className="nav_link">Listeners</Link> */}</li>
         <li>
           <Link className="nav_link" id="search_music_page" to="/search">
             Search Music
@@ -21,6 +20,7 @@ const Navigation = (e) => {
       </ul>
       <div className="nav_divider"></div>
       <ul className="nav_sub">
+        {/* 기존코드 */}
         <li>{/* <Link className="nav_link" href="">About</Link> */}</li>
         <li>{/* <Link className="nav_link" href="">Contact</Link> */}</li>
       </ul>

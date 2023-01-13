@@ -27,8 +27,8 @@ const Curator = (e) => {
           <div className="item">
             <div className="thumb"></div>
             <div className="info">
-              <div className="name">Fantasy</div>
-              <div className="desc">Sam</div>
+              <div className="name">Seung yeon</div>
+              <div className="desc">PlayList</div>
             </div>
           </div>
           <div className="item">

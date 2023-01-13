@@ -1,16 +1,17 @@
 import React from "react";
-
-import Home from "./home";
+import Header from "./header";
+import Navigation from "./nav";
 import MiniPlayer from "./miniPlayer";
 import Player from "./player";
-import Curator from "./curator";
-import Header from "./header";
-import Search from "./search";
-import Navigation from "./nav";
 import Background from "./background"
+
+import Home from "./home";
+import Curator from "./curator";
+import Search from "./search";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-const Body = (e) => {
+  const Body = (e) => {
   return (
     <Router>
       <div>
@@ -22,7 +23,7 @@ const Body = (e) => {
               rel="stylesheet"
               href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
             />
-            <link rel="stylesheet" href="./style.css" />
+            {/* <link rel="stylesheet" href="./style.css" /> */}
           </div>
         </header>
 
@@ -46,10 +47,9 @@ const Body = (e) => {
             {/* SearchPage로 전환 */}
             <Route path="/search" element={<Search />}></Route>
           </Routes>
-          
-        </div>
-      </div>
-    </Router>
+         </div>
+       </div>
+     </Router>
   );
 };
 

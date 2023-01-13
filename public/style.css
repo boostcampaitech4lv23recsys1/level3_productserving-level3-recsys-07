@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Oswald:300,400,700");
+/* @import url("https://fonts.googleapis.com/css?family=Oswald:300,400,700");
 i[class^=btn] {
   font-size: 20px;
   margin-right: 30px;
@@ -608,17 +608,6 @@ body {
   opacity: 0;
 }
 
-/* .curator_player {
-  position: absolute;
-  text-align: center;
-  font-size: 14px;
-  width: 100vw;
-  height: 100%;
-  -webkit-overflow-scrolling: touch;
-  white-space: nowrap;
-  opacity: 0;
-} */
-
 .curator_player_item {
   padding: 0 50px;
   position: fixed;
@@ -630,7 +619,6 @@ body {
   justify-content: center;
   width: 50vw;
   height: 50vh;
-  /* margin: 0 20px; */
 }
 
 .connect_btn {
@@ -741,4 +729,4 @@ body {
 
 .shadow {
   box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.4);
-}
+} */
