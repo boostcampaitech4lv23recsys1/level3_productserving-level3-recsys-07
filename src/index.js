@@ -191,6 +191,10 @@ $('.item').click(function(){
 			
 	mainToPlaylist.fromTo($('.curator_list'), 0.5, {opacity: 1, display: 'block', x: 0},
 										{opacity: 0, x: 30, display: 'none', ease: Power2.easeInOut}, 0.5)
+
+	//playList										
+	mainToPlaylist.fromTo($('#playList'), 0.8, {opacity: 0, display: 'none', x: 30},
+										{opacity: 1, x: 0, display: 'block', ease: Power2.easeInOut}, 1.2);										
 	
 });
 
@@ -201,9 +205,11 @@ $('.back_btn').click(function(){
 	if($('#curator').css("display") === "none"){
 		var playlistToMain = new TimelineMax({});
 	
-		// Hide
-		playlistToMain.fromTo($('#curator'), 0.8, {display: 'none', opacity: 0, scale: 1.1}, 
-											{display: 'block', opacity: 1, scale: 1, ease: Power2.easeInOut}, 0)
+	// Hide
+	playlistToMain.fromTo($('#curator'), 0.8, {display: 'none', opacity: 0, scale: 1.1}, 
+										{display: 'block', opacity: 1, scale: 1, ease: Power2.easeInOut}, 0)
+
+	playlistToMain.to($('#playList'), 0.8, {display: 'none', opacity: 0, scale: 1.1, ease: Power2.easeInOut}, 0);											
 }
 	
 	// From Main(2) to Home(1)
