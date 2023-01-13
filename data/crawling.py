@@ -106,9 +106,9 @@ def create_df(headers, base_df):
             continue
     
         if response.status_code == 429:
-            print('JSONDecodeError: "Too many requests"')
+            print(f"JSONDecodeError: {response.text}")
             break
-        
+
         searched_tracks = response.json()["tracks"]["items"]
         
         if searched_tracks == []:
