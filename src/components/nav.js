@@ -6,14 +6,14 @@ const Navigation = (e) => {
     <div className="nav">
       <ul className="nav_main">
         <li>
-          <Link className="nav_link" id="home_page" to="/">
+          <a className="nav_link" id="home_page">
             Home
-          </Link>
+          </a>
         </li>
         <li>
-          <Link className="nav_link" id="search_music_page" to="/search">
+          <a className="nav_link" id="search_music_page">
             Search Music
-          </Link>
+          </a>
         </li>
 
         <li>{/* <Link className="nav_link">LP. Mix</Link> */}</li>

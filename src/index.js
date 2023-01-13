@@ -236,34 +236,6 @@ $('.back_btn').click(function(){
 	}
 });
 
-// ===== Search Music Page Click=====
-$("#search_music_page").click(function(){
-	var search = new TimelineMax({});
- 
-	// Hide
-	search.to($('.text-wrap'), 0.5, {display: 'none', opacity: 0, y: -20, ease: Power2.easeInOut}, 0);
-	
-	// Background down
-	search.to($('.wave-container'), 1, {yPercent: 30, ease: Power2.easeInOut}, 0);
-
-	// Show
-	$('#search_container').css('display', 'block');
-
-	// $('#drop_down').css('display', 'block');
-	search.fromTo($('.list_box'), 0.8, {x: 15},
-										{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
-
-	search.fromTo($('.submit_buttom'), 0.8, {opacity: 0, x: 30},
-										{opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
-
-	search.fromTo($('.drop_down_div'), 0.8, {opacity: 0, display: 'none', x: 30},
-										{opacity: 1, x: 0, display: 'block', ease: Power2.easeInOut}, 1.2);								
-
-	TweenMax.to(".dim", 0.5, {opacity: 0, display: 'none', ease: Power2.easeInOut});
-	TweenMax.to(".nav", 0.5, {xPercent: -100, display:'none', ease: Expo.easeOut});
-	$('.logo-text').css({'opacity': '1', 'display': 'block'});							
-});
-
 
 // ===== Home Page Click =====
 $("#home_page").click(function(){
@@ -272,6 +244,12 @@ $("#home_page").click(function(){
 	// Hide
 	// mainToHome.fromTo($('.submit_buttom'), 0.5, {opacity: 1, display: 'block', x: 0},
 	// 									{opacity: 0, x: 30, display: 'none', ease: Power2.easeInOut}, 0.5);
+
+	
+	TweenMax.to(".dim", 0.5, {opacity: 0, display: 'none', ease: Power2.easeInOut});
+	TweenMax.to(".nav", 0.5, {xPercent: -100, display:'none', ease: Expo.easeOut});
+	TweenMax.to(".logo-text", 0.5, {x: 250, ease: Expo.easeOut});
+	$('#search_container').css('display', 'None');
 
 	mainToHome.to($('.submit_buttom'), 0.5, {display: 'none', opacity: 0, x: 15, ease: Power2.easeInOut}, 0.5);										
 
@@ -294,6 +272,45 @@ $("#home_page").click(function(){
 		
 });
 
+
+
+// ===== Search Music Page Click=====
+$("#search_music_page").click(function(){
+
+	if ($('#search_container').css("display") === 'none') {
+		$('#search_container').css('display', 'block');
+	};
+	var search = new TimelineMax({});
+ 
+	// Hide
+	search.to($('.text-wrap'), 0.5, {display: 'none', opacity: 0, y: -20, ease: Power2.easeInOut}, 0);
+	
+	// Background down
+	search.to($('.wave-container'), 1, {yPercent: 30, ease: Power2.easeInOut}, 0);
+
+	// Show
+	
+
+	// $('#drop_down').css('display', 'block');
+	search.fromTo($('.list_box'), 0.8, {x: 15},
+										{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
+
+	search.fromTo($('.submit_buttom'), 0.8, {opacity: 0, x: 30},
+										{opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
+
+	search.fromTo($('.drop_down_div'), 0.8, {opacity: 0, display: 'none', x: 30},
+										{opacity: 1, x: 0, display: 'block', ease: Power2.easeInOut}, 1.2);								
+
+	TweenMax.to(".dim", 0.5, {opacity: 0, display: 'none', ease: Power2.easeInOut});
+	TweenMax.to(".nav", 0.5, {xPercent: -100, display:'none', ease: Expo.easeOut});
+	$('.logo-text').css({'opacity': '1', 'display': 'block'});	
+
+
+						
+});
+
+
+// ===== Result Page Click=====
 $(".result_page").click(function(){
 	var result = new TimelineMax({});
 

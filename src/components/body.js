@@ -31,6 +31,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
           {/* 기초 세팅 */}
           <Header />
           <Navigation />
+          <Search/>
           <MiniPlayer />
           <div className='dim'></div>
           <Player />
@@ -41,12 +42,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
           {/* 큐레이터 전환 */}
           <Curator />
-          <Routes>
-            {/* Navigation에서 Home 누르면 LandingPage로 전환 */}
-            <Route path="/"></Route>
-            {/* SearchPage로 전환 */}
-            <Route path="/search" element={<Search />}></Route>
-          </Routes>
          </div>
        </div>
      </Router>
