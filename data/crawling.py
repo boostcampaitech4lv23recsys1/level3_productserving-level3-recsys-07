@@ -9,10 +9,10 @@ from tqdm import tqdm
 
 def paser_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--id", default='7fd16ed6bc6646e689486e3d43af2b91', type=str, help="client_id")
-    parser.add_argument("--secret", default="8e86948aff20452c87706cc6100686af", type=str, help="client_secret")
-    parser.add_argument("--base_df", default="./data/song_artist_part_2.csv", type=str, help="csv name")
-    parser.add_argument("--end_df", default="./data/searched_df_part_2.csv", type=str, help="csv name")
+    parser.add_argument("--id", default='063ea4e006334d1bb7beb69bb9855ff0', type=str, help="client_id") #7fd16ed6bc6646e689486e3d43af2b91
+    parser.add_argument("--secret", default="8a66fbb488004ed0bdcac9704600af42", type=str, help="client_secret")#8e86948aff20452c87706cc6100686af
+    parser.add_argument("--base_df", default="song_artist_part_0.csv", type=str, help="csv name") # ./data/song_artist_part_2.csv
+    parser.add_argument("--end_df", default="searched_df_part_0.csv", type=str, help="csv name") # ./data/searched_df_part_2.csv
     args = parser.parse_args()
     return args
 
@@ -76,6 +76,20 @@ def search_with_query(
     return response
 
 
+def search_except(track_name, artist_name, search_except):
+
+    searched_sr = pd.Series(
+            {
+                "searched_track_name": track_name, 
+                "searched_track_artist": artist_name, 
+                "searched_track_id": search_except, 
+                "searched_preview_url": search_except,
+                }
+            )
+
+    return searched_sr
+
+
 def create_df(headers, base_df):
     searched_df = pd.DataFrame(columns=[
         "searched_track_artist",
@@ -83,27 +97,22 @@ def create_df(headers, base_df):
         "searched_track_id",
         "searched_preview_url",
         ])
-    for track_name, artist_name in tqdm(zip(base_df.song, base_df.kakao_artist)):
+    for track_name, artist_name in zip(tqdm(base_df.song), base_df.kakao_artist):
         response = search_with_query(headers, track_name, artist_name)
-        
-        searched_sr = pd.Series(
-            {
-                "searched_track_name": track_name, 
-                "searched_track_artist": artist_name, 
-                "searched_track_id": 'None', 
-                "searched_preview_url": 'None',
-                }
-            )
         
         # 검색결과가 없거나, 다른 음원이 의심될 때 예외 처리
         if response.status_code == 400:
-            searched_df.loc[len(searched_df)] = searched_sr
+            searched_df.loc[len(searched_df)] = search_except(track_name=track_name, artist_name=artist_name, search_except='code 400')
             continue
     
+        if response.status_code == 429:
+            print('JSONDecodeError: "Too many requests"')
+            break
+        
         searched_tracks = response.json()["tracks"]["items"]
         
         if searched_tracks == []:
-            searched_df.loc[len(searched_df)] = searched_sr
+            searched_df.loc[len(searched_df)] = search_except(track_name=track_name, artist_name=artist_name, search_except='vacant item')
             continue
         
         searched_track_name = searched_tracks[0]["name"]
@@ -112,7 +121,7 @@ def create_df(headers, base_df):
         searched_preview_url = searched_tracks[0]["preview_url"]
         
         if searched_track_artist.lower() != artist_name.lower() and searched_track_name.lower() != track_name.lower():
-            searched_df.loc[len(searched_df)] = searched_sr
+            searched_df.loc[len(searched_df)] = search_except(track_name=track_name, artist_name=artist_name, search_except='not matched')
             continue
         
         searched_df.loc[len(searched_df)] = pd.Series(
@@ -131,5 +140,5 @@ if __name__ == '__main__':
     headers = set_headers(args)
     song_artist_df = pd.read_csv(args.base_df)
     searched_df = create_df(headers, song_artist_df)
-    searched_df.to_csv(args.end_df)
+    searched_df.to_csv(args.end_df, index=False)
 
