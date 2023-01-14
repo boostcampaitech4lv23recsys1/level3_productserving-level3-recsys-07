@@ -792,7 +792,6 @@ img.track {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ff2121;
   width: 50vw;
   height: 50vh;
 }
@@ -801,33 +800,31 @@ img.track {
 #playList {
   width: 100%;
   height: 100%;
-  position: fixed;
+  position: absolute;
   text-align: center;
-  color: #252120;
   display: none;
 }
 
-.play_list_cls {
-  position: absolute;
+
+#playList .play_list_cls {
+  position: relative;
   text-align: center;
   font-size: 14px;
   width: 100vw;
   height: 100%;
   -webkit-overflow-scrolling: touch;
   white-space: nowrap;
-  opacity: 0;
 }
 
-.iframe .playlist {
+
+.iframe-embed{
   padding: 0 50px;
   position: fixed;
-  top: 75%;
+  top: 25%;
+  left: 25%;
   margin-bottom: 17.55vh;
   margin-top: -6.6666666667vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50vw;
-  height: 50vh;
-  margin: 0 20px;
 }

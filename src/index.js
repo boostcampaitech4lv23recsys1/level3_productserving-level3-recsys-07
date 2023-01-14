@@ -187,14 +187,18 @@ $('.item').click(function(){
 	var mainToPlaylist = new TimelineMax({});
 	
 	// Hide
-	mainToPlaylist.to($('#curator'), 0.8, {display: 'none', opacity: 0, scale: 1.1, ease: Power2.easeInOut}, 0)
+	mainToPlaylist.to($('#curator'), 0.8, {display: 'none', opacity: 0, scale: 1.1, ease: Power2.easeInOut}, 0);
 			
 	mainToPlaylist.fromTo($('.curator_list'), 0.5, {opacity: 1, display: 'block', x: 0},
-										{opacity: 0, x: 30, display: 'none', ease: Power2.easeInOut}, 0.5)
+										{opacity: 0, x: 30, display: 'none', ease: Power2.easeInOut}, 0.5);
 
 	//playList										
 	mainToPlaylist.fromTo($('#playList'), 0.8, {opacity: 0, display: 'none', x: 30},
-										{opacity: 1, x: 0, display: 'block', ease: Power2.easeInOut}, 1.2);										
+										{opacity: 1, x: 0, display: 'block', ease: Power2.easeInOut}, 1.2);
+
+
+	mainToPlaylist.fromTo($('.iframe-embed'), 0.8, {x: 15},
+										{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
 	
 });
 
@@ -205,10 +209,15 @@ $('.back_btn').click(function(){
 	if($('#curator').css("display") === "none"){
 		var playlistToMain = new TimelineMax({});
 	
-	// Hide
+	// show curator list
 	playlistToMain.fromTo($('#curator'), 0.8, {display: 'none', opacity: 0, scale: 1.1}, 
 										{display: 'block', opacity: 1, scale: 1, ease: Power2.easeInOut}, 0)
 
+	playlistToMain.fromTo($('.curator_list'), 0.8, {display: 'none', opacity: 0, scale: 1.1}, 
+										{display: 'block', opacity: 1, scale: 1, ease: Power2.easeInOut}, 0)
+
+
+	// hide playlist
 	playlistToMain.to($('#playList'), 0.8, {display: 'none', opacity: 0, scale: 1.1, ease: Power2.easeInOut}, 0);											
 }
 	

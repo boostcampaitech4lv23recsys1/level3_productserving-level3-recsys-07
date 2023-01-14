@@ -11,6 +11,8 @@ import Search from "./search";
 
 import CuratorPlayList from "./curatorPlayList";
 
+import ResultPage from "./resultPage";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
   const Body = (e) => {
@@ -41,10 +43,14 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
           {/* 홈페이지 */}
           <Home />
-          <CuratorPlayList />
-
+          
           {/* 큐레이터 전환 */}
           <Curator />
+          <CuratorPlayList />
+
+          {/* Search 결과 페이지 */}
+          {/* <ResultPage /> */}
+
          </div>
        </div>
      </Router>
