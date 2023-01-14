@@ -246,6 +246,12 @@ $('.back_btn').click(function(){
 // ===== Home Page Click =====
 $("#home_page").click(function(){
 
+	$('#start_input_container').hide();
+	$('#handleurl_container').hide()
+	$('#select_container').hide()
+	$('#curator').hide()
+	$('#back_btn').hide()
+
 	var mainToHome = new TimelineMax({});
 	// Hide
 	// mainToHome.fromTo($('.submit_buttom'), 0.5, {opacity: 1, display: 'block', x: 0},
@@ -255,7 +261,7 @@ $("#home_page").click(function(){
 	TweenMax.to(".dim", 0.5, {opacity: 0, display: 'none', ease: Power2.easeInOut});
 	TweenMax.to(".nav", 0.5, {xPercent: -100, display:'none', ease: Expo.easeOut});
 	TweenMax.to(".logo-text", 0.5, {x: 250, ease: Expo.easeOut});
-	$('#search_container').css('display', 'None');
+	
 
 	mainToHome.to($('.submit_buttom'), 0.5, {display: 'none', opacity: 0, x: 15, ease: Power2.easeInOut}, 0.5);										
 
@@ -279,41 +285,50 @@ $("#home_page").click(function(){
 });
 
 
+// ===== Start input page for input url and select your own  =====
+// ===== main to input =====
+$("#start_input_page").click(function(){
 
-// ===== Search Music Page Click=====
-$("#search_music_page").click(function(){
+	$('#start_input_container').show()
+	$('#handleurl_container').hide()
+	$('#select_container').hide()
+	$('#curator').hide()
+	$('.back_btn').hide()
 
-	if ($('#search_container').css("display") === 'none') {
-		$('#search_container').css('display', 'block');
-	};
-	var search = new TimelineMax({});
+
+	var mainToInput = new TimelineMax({});
  
 	// Hide
-	search.to($('.text-wrap'), 0.5, {display: 'none', opacity: 0, y: -20, ease: Power2.easeInOut}, 0);
+	mainToInput.to($('.text-wrap'), 0.5, {display: 'none', opacity: 0, y: -20, ease: Power2.easeInOut}, 0);
 	
 	// Background down
-	search.to($('.wave-container'), 1, {yPercent: 30, ease: Power2.easeInOut}, 0);
+	mainToInput.to($('.wave-container'), 1, {yPercent: 30, ease: Power2.easeInOut}, 0);
 
 	// Show
-	
-
-	// $('#drop_down').css('display', 'block');
-	search.fromTo($('.list_box'), 0.8, {x: 15},
-										{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
-
-	search.fromTo($('.submit_buttom'), 0.8, {opacity: 0, x: 30},
-										{opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
-
-	search.fromTo($('.drop_down_div'), 0.8, {opacity: 0, display: 'none', x: 30},
-										{opacity: 1, x: 0, display: 'block', ease: Power2.easeInOut}, 1.2);								
+	mainToInput.to($('.logo-text, .line'), 0.5, {display: 'block', opacity: 1, y: 0, ease: Power2.easeInOut}, 1.2);
 
 	TweenMax.to(".dim", 0.5, {opacity: 0, display: 'none', ease: Power2.easeInOut});
 	TweenMax.to(".nav", 0.5, {xPercent: -100, display:'none', ease: Expo.easeOut});
 	$('.logo-text').css({'opacity': '1', 'display': 'block'});	
-
+	
 
 						
 });
+
+
+$("#playlist_url").click(function(){
+	$('#start_input_container').hide()
+	$('#handleurl_container').css('display', 'flex')
+	
+});
+
+$("#playlist_select").click(function(){
+	$('#start_input_container').hide()
+	$('#select_container').css('display', 'flex')
+});
+
+
+
 
 
 // ===== Result Page Click=====
