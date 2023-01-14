@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useEffect } from 'react';
+import { Credentials } from '../spotifyAPI/Credentials';
+import axios from 'axios';
+
 import { Credentials } from '../spotifyAPI/Credentials';
 import PlayListOutput from '../output/playlistOutput';
 
 import axios from 'axios';
 
 const HandleUrl = () => {
-  const spotify = Credentials();  
-  const [token, setToken] = useState('');  
 
+  const spotify = Credentials();  
+
+  const [token, setToken] = useState('');  
   const [playlistUrl, setPlaylistUrl] = useState('');
   const [playlistData, setPlaylistData] = useState('');
   const [playlist, setPlaylist] = useState('');
@@ -49,6 +53,7 @@ const HandleUrl = () => {
     playlistData.tracks.items.map((trackObj) => playlistArray.push(trackObj.track.name));
     console.log(playlistArray);
     setPlaylist([...playlistArray]);
+
   }
 
   useEffect(() => {
@@ -71,8 +76,7 @@ const HandleUrl = () => {
           <input className="input_url" type="text" value={playlistUrl} placeholder="Enter Your URL" onChange={(event) => setPlaylistUrl(event.target.value)} />
           <button id="playlist_submit_button" onClick={clickHandler}> START </button>
         </form>
-        
-        <h2>{playlistData}</h2>
+        <h2>{playlistName}</h2>
       </div>
       {isButtonClick && <PlayListOutput src={playlistUrl}/>}
     </div>
