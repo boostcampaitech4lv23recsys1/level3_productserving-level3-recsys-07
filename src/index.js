@@ -193,11 +193,11 @@ $('.item').click(function(){
 										{opacity: 0, x: 30, display: 'none', ease: Power2.easeInOut}, 0.5);
 
 	//playList										
-	mainToPlaylist.fromTo($('#playList'), 0.8, {opacity: 0, display: 'none', x: 30},
+	mainToPlaylist.fromTo($('.playList'), 0.8, {opacity: 0, display: 'none', x: 30},
 										{opacity: 1, x: 0, display: 'block', ease: Power2.easeInOut}, 1.2);
 
 
-	mainToPlaylist.fromTo($('.iframe-embed'), 0.8, {x: 15},
+	mainToPlaylist.fromTo($('.playList_cls'), 0.8, {x: 15},
 										{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
 	
 });
@@ -218,7 +218,7 @@ $('.back_btn').click(function(){
 
 
 	// hide playlist
-	playlistToMain.to($('#playList'), 0.8, {display: 'none', opacity: 0, scale: 1.1, ease: Power2.easeInOut}, 0);											
+	playlistToMain.to($('.playList'), 0.8, {display: 'none', opacity: 0, scale: 1.1, ease: Power2.easeInOut}, 0);											
 }
 	
 	// From Main(2) to Home(1)
@@ -336,6 +336,23 @@ $("#playlist_select").click(function(){
 	$('#select_container').css('display', 'flex')
 });
 
+
+$(".submit-playlist").click(function(){
+	$('#select_container').hide()
+	$('#playList').css('display', 'flex')
+
+})
+
+// ===== Playlist_url select page to Playlist page
+$("#playlist_submit_button").click(function(){
+	$('.hadleurl_contents').css('display', 'none');
+	
+	// $('.input_url_text').hide()
+	// $('.input_url').hide()
+	// $('#playlist_submit_button').hide()
+
+	$(".output_playList").css('display', 'flex');
+})
 
 
 

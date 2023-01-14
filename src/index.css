@@ -775,7 +775,7 @@ img.track {
 #playlist_url {
   cursor: pointer;
   position: relative;
-  background-color: #3b7d4a
+  background-color: #3b7d4a;
 }
 
 #playlist_select {
@@ -841,6 +841,7 @@ img.track {
   flex-direction: column;
 }
 
+
 #handleurl_container .hadleurl_contents h4 {
   color: #33476a;
   margin-bottom: 20px;
@@ -895,11 +896,9 @@ img.track {
   width: 50vw;
   height: 50vh;
   flex-direction: column;
-  background-color: #ff2121;
 }
 
-
-#playList {
+.output_playList{
   width: 100%;
   height: 100%;
   position: absolute;
@@ -908,18 +907,27 @@ img.track {
 }
 
 
-#playList .play_list_cls {
+.playList {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  text-align: center;
+  display: none;
+}
+
+
+.playList .playList_cls {
   position: relative;
   text-align: center;
   font-size: 14px;
-  width: 100vw;
+  width: 100%;
   height: 100%;
   -webkit-overflow-scrolling: touch;
   white-space: nowrap;
 }
 
 
-.iframe-embed{
+.playList .playList_cls .iframe_embed{
   padding: 0 50px;
   position: fixed;
   top: 25%;

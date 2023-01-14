@@ -4,10 +4,6 @@ import Listbox from '../spotifyAPI/Listbox';
 import Detail from '../spotifyAPI/Detail';
 import { Credentials } from '../spotifyAPI/Credentials';
 import axios from 'axios';
-// import "./spotifyAPI/spotify.module.css"
-// import "./main_css/test_main.module.css";
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
-
 
 const Select = () => {
   
@@ -18,8 +14,6 @@ const Select = () => {
   const [playlist, setPlaylist] = useState({selectedPlaylist: '', listOfPlaylistFromAPI: []});
   const [tracks, setTracks] = useState({selectedTrack: '', listOfTracksFromAPI: []});
   const [trackDetail, setTrackDetail] = useState(null);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
 
@@ -125,9 +119,10 @@ const Select = () => {
               
               <Listbox items={tracks.listOfTracksFromAPI} clicked={listboxClicked} />
               {trackDetail && <Detail {...trackDetail} /> }
-              <Link className="nav_link" id="result_page" to="/result">
-                    RESULT
-              </Link>
+              <button id="submit_result_on_select_item"><span>PlayList URL</span> RESULT </button>
+              {/* <Link className="nav_link" id="result_page" to="/result"> */}
+                    
+              {/* </Link> */}
             </div>
           </div>
       </form>

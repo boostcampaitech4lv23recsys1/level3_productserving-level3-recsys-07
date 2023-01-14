@@ -16,6 +16,8 @@ import CuratorPlayList from "./curatorPlayList";
 
 import ResultPage from "./resultPage";
 
+import PlayListOutput from "./output/playlistOutput";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
   const Body = (e) => {
@@ -50,6 +52,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
           <Input></Input>
           <HandleUrl></HandleUrl>
           <Select></Select>
+          {/* <PlayListOutput /> */}
       
           <CuratorPlayList />
 
