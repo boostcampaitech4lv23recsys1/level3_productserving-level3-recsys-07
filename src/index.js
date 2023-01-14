@@ -345,13 +345,8 @@ $(".submit-playlist").click(function(){
 
 // ===== Playlist_url select page to Playlist page
 $("#playlist_submit_button").click(function(){
-	$('.hadleurl_contents').css('display', 'none');
-	
-	// $('.input_url_text').hide()
-	// $('.input_url').hide()
-	// $('#playlist_submit_button').hide()
-
-	$(".output_playList").css('display', 'flex');
+	$('.hadleurl_contents').css('display', 'none')
+	$('.output_playList').css('display', 'flex');
 })
 
 

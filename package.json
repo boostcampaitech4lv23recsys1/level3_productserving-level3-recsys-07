@@ -12,10 +12,8 @@
     "react-bootstrap": "^2.7.0",
     "react-dom": "^18.2.0",
     "react-gsap": "^3.2.1",
-    "react-helmet": "^6.1.0",
     "react-router-dom": "^6.6.1",
     "react-scripts": "5.0.1",
-    "react-spotify-embed": "^1.0.4",
     "spotify-api.js": "^9.2.5",
     "web-vitals": "^3.0.4"
   },

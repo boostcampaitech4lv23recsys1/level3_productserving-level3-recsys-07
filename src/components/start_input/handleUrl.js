@@ -1,11 +1,7 @@
-import React, { useState, useEffect, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Credentials } from '../spotifyAPI/Credentials';
 import axios from 'axios';
-
-import { Credentials } from '../spotifyAPI/Credentials';
 import PlayListOutput from '../output/playlistOutput';
-
-import axios from 'axios';
 
 const HandleUrl = () => {
 
@@ -61,7 +57,8 @@ const HandleUrl = () => {
   }, [isButtonClick]);
 
 
-  const clickHandler = () => {
+  const clickHandler = e => {
+    e.preventDefault();
     setIsButtonClick(!isButtonClick);
   };
 
@@ -69,16 +66,16 @@ const HandleUrl = () => {
 
   return (
     <div  id='handleurl_container'>
-      
       <div className='hadleurl_contents'>
         <h4 className='input_url_text'>Enter a Spotify Playlist URL</h4>
         <form onSubmit={handleSubmit}>
           <input className="input_url" type="text" value={playlistUrl} placeholder="Enter Your URL" onChange={(event) => setPlaylistUrl(event.target.value)} />
           <button id="playlist_submit_button" onClick={clickHandler}> START </button>
+          {/* {isButtonClick && <PlayListOutput src={playlistUrl}/>} */}
         </form>
-        <h2>{playlistName}</h2>
+        <h2>{playlist}</h2>
       </div>
-      {isButtonClick && <PlayListOutput src={playlistUrl}/>}
+      
     </div>
   );
 };
