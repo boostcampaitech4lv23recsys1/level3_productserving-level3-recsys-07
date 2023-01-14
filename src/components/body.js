@@ -7,7 +7,10 @@ import Background from "./background"
 
 import Home from "./home";
 import Curator from "./curator";
-import Search from "./search";
+// import Search from "./search";
+import Input from "./start_input/input"
+import HandleUrl from "./start_input/handleUrl"
+import Select from "./start_input/select"
 
 import CuratorPlayList from "./curatorPlayList";
 
@@ -35,7 +38,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
           {/* 기초 세팅 */}
           <Header />
           <Navigation />
-          <Search/>
           <MiniPlayer />
           <div className='dim'></div>
           <Player />
@@ -43,7 +45,14 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
           {/* 홈페이지 */}
           <Home />
-          
+
+          {/* Start Input 페이지 */}
+          <Input></Input>
+          <HandleUrl></HandleUrl>
+          <Select></Select>
+      
+          <CuratorPlayList />
+
           {/* 큐레이터 전환 */}
           <Curator />
           <CuratorPlayList />

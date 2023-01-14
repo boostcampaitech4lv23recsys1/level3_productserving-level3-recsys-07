@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import Dropdown from './spotifyAPI/Dropdown';
-import Listbox from './spotifyAPI/Listbox';
-import Detail from './spotifyAPI/Detail';
-import { Credentials } from './spotifyAPI/Credentials';
+import Dropdown from '../spotifyAPI/Dropdown';
+import Listbox from '../spotifyAPI/Listbox';
+import Detail from '../spotifyAPI/Detail';
+import { Credentials } from '../spotifyAPI/Credentials';
 import axios from 'axios';
 // import "./spotifyAPI/spotify.module.css"
 // import "./main_css/test_main.module.css";
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
 
 
-const Search = () => {
+const Select = () => {
   
   const spotify = Credentials();  
 
@@ -111,7 +111,7 @@ const Search = () => {
   
 
   return (
-    <div className="container" id='search_container'>
+    <div className="container" id='select_container'>
       <form onSubmit={buttonClicked}>
         <div className='drop_down_div'>
           <Dropdown label="Genre :" options={genres.listOfGenresFromAPI} selectedValue={genres.selectedGenre} changed={genreChanged} />
@@ -135,4 +135,4 @@ const Search = () => {
   );
 }
 
-export default Search;
+export default Select;
