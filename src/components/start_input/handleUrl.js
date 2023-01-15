@@ -47,7 +47,6 @@ const HandleUrl = () => {
         setPlaylist([...playlistArray]);
 
         setSrc(["https://open.spotify.com/embed/playlist/" + playlistUrl + "?utm_source=generator"])
-    
       });
     
     // playlistData가 setPlaylistData에서 안먹혀서 위에서 수정
@@ -67,12 +66,12 @@ const HandleUrl = () => {
           <button type='submit' id="playlist_submit_button"> START </button>
         </form>
       </div>
-        <div className="output_playlist">
-            <div className="playlist_cls">
-              <iframe className="iframe_embed" style={{style}} src={src}
-                  width="50%" height="352" frameBorder="0" allowFullScreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-            </div>
-        </div>
+      <div className="output_playlist">
+          <div className="playlist_cls">
+            <iframe className="iframe_embed" style={{style}} src={src}
+                width="50%" height="352" frameBorder="0" allowFullScreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+          </div>
+      </div>
       
     </div>
   );
