@@ -193,11 +193,11 @@ $('.item').click(function(){
 										{opacity: 0, x: 30, display: 'none', ease: Power2.easeInOut}, 0.5);
 
 	//playList										
-	mainToPlaylist.fromTo($('.playList'), 0.8, {opacity: 0, display: 'none', x: 30},
+	mainToPlaylist.fromTo($('.curator_playlist'), 0.8, {opacity: 0, display: 'none', x: 30},
 										{opacity: 1, x: 0, display: 'block', ease: Power2.easeInOut}, 1.2);
 
 
-	mainToPlaylist.fromTo($('.playList_cls'), 0.8, {x: 15},
+	mainToPlaylist.fromTo($('.playlist_cls'), 0.8, {x: 15},
 										{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
 	
 });
@@ -206,23 +206,45 @@ $('.item').click(function(){
 
 $('.back_btn').click(function(){
 // ===== From Playlist(3) to Main(2)
-	if($('#curator').css("display") === "none"){
+	if($('.curator_playlist').css("display") !== "none"){
 		var playlistToMain = new TimelineMax({});
 	
-	// show curator list
-	playlistToMain.fromTo($('#curator'), 0.8, {display: 'none', opacity: 0, scale: 1.1}, 
-										{display: 'block', opacity: 1, scale: 1, ease: Power2.easeInOut}, 0)
+		// hide playlist
+		playlistToMain.to($('.curator_playlist'), 0.8, {display: 'none', opacity: 0, scale: 1.1, ease: Power2.easeInOut}, 0);
 
-	playlistToMain.fromTo($('.curator_list'), 0.8, {display: 'none', opacity: 0, scale: 1.1}, 
-										{display: 'block', opacity: 1, scale: 1, ease: Power2.easeInOut}, 0)
+		// show curator list
+		playlistToMain.fromTo($('#curator'), 0.8, {display: 'none', opacity: 0, scale: 1.1}, 
+											{display: 'block', opacity: 1, scale: 1, ease: Power2.easeInOut}, 0)
 
+		playlistToMain.fromTo($('.curator_list'), 0.8, {display: 'none', opacity: 0, scale: 1.1}, 
+											{display: 'block', opacity: 1, scale: 1, ease: Power2.easeInOut}, 0)
 
-	// hide playlist
-	playlistToMain.to($('.playList'), 0.8, {display: 'none', opacity: 0, scale: 1.1, ease: Power2.easeInOut}, 0);											
-}
+	}
+	// start_input to Home
+	else if($('#start_input_container').css('display') !== "none"){
+		var startInputToHome = new TimelineMax({});
+
+		// hide start_input
+		startInputToHome.to($('#start_input_container'), 0.8, {display: 'none', opacity: 0, scale: 1.1, ease: Power2.easeInOut}, 0);
+		startInputToHome.to($('#handleurl_container'), 0.8, {display: 'none', opacity: 0, scale: 1.1, ease: Power2.easeInOut}, 0);
+	
+
+		// Background Up
+		startInputToHome.to($('.wave-container'), 1, {yPercent: 0, ease: Power2.easeInOut}, 1);
+
+		// 	Show
+		startInputToHome.to($('.text-wrap'), 0.5, {display: 'flex', opacity: 1, y: 0, ease: Power2.easeInOut}, 1.2);
+
+		startInputToHome.to($('.logo-text, .line'), 0.5, {display: 'block', opacity: 1, y: 0, ease: Power2.easeInOut}, 1.2);
+
+		// 	Force to redraw by using y translate
+		startInputToHome.fromTo($('.text-wrap .text'), 0.1, {y: 0.1, position: 'absolute'},
+											{y: 0, position: 'relative', ease: Power2.easeInOut}, 1.3);
+
+	}
 	
 	// From Main(2) to Home(1)
-	else {
+	else{
 		var mainToHome = new TimelineMax({});
 		// Hide
 		mainToHome.fromTo($('.curator_title_wrapper'), 0.5, {opacity: 1, x: 0},
@@ -302,7 +324,6 @@ $("#start_input_page").click(function(){
 	$('#handleurl_container').hide()
 	$('#select_container').hide()
 	$('#curator').hide()
-	$('.back_btn').hide()
 
 
 	var mainToInput = new TimelineMax({});
@@ -318,10 +339,11 @@ $("#start_input_page").click(function(){
 
 	TweenMax.to(".dim", 0.5, {opacity: 0, display: 'none', ease: Power2.easeInOut});
 	TweenMax.to(".nav", 0.5, {xPercent: -100, display:'none', ease: Expo.easeOut});
-	$('.logo-text').css({'opacity': '1', 'display': 'block'});	
-	
 
-						
+
+	mainToInput.fromTo($('.back_btn'), 0.8, {x: 15},
+		{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
+	
 });
 
 
@@ -343,34 +365,15 @@ $(".submit-playlist").click(function(){
 
 })
 
-// ===== Playlist_url select page to Playlist page
-$("#playlist_submit_button").click(function(){
-	$('.hadleurl_contents').css('display', 'none')
-	$('.output_playList').css('display', 'flex');
-})
+// // ===== Playlist_url select page to Playlist page
+// $("#playlist_submit_button").click(function(){
+// 	$('.hadleurl_contents').css('display', 'none')
+// 	// $('.input_url_text').hide()
+// 	// $('.input_url').hide()
+// 	// $('#playlist_submit_button').hide()
 
 
+// 	$('.output_playlist').css('display', 'flex');
+// })
 
 
-// ===== Result Page Click=====
-$(".result_page").click(function(){
-	var result = new TimelineMax({});
-
-	// Hide
-	result.to($('.list_box'), 0.5, {display: 'none', opacity: 0, y: -20, ease: Power2.easeInOut}, 0);
-	result.to($('.submit_buttom'), 0.5, {display: 'none', opacity: 0, y: -20, ease: Power2.easeInOut}, 0);
-	result.to($('.drop_down_div'), 0.5, {display: 'none', opacity: 0, y: -20, ease: Power2.easeInOut}, 0);
-
-	// Background down
-	result.to($('.wave-container'), 1, {yPercent: 30, ease: Power2.easeInOut}, 0);
-
-
-	// Show
-	$('#playList').css('display', 'block');
-
-	result.fromTo($('.iframe playlist'), 0.8, {opacity: 0, x: 30},
-										{opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
-		
-	result.fromTo($('.play_list_cls'), 0.8, {opacity: 0, display: 'none', x: 30},
-									{opacity: 1, x: 0, display: 'block', ease: Power2.easeInOut}, 1.2);
-});

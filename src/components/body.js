@@ -14,10 +14,6 @@ import Select from "./start_input/select"
 
 import CuratorPlayList from "./curatorPlayList";
 
-import ResultPage from "./resultPage";
-
-import PlayListOutput from "./output/playlistOutput";
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
   const Body = (e) => {
@@ -49,19 +45,14 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
           <Home />
 
           {/* Start Input 페이지 */}
-          <Input></Input>
-          <HandleUrl></HandleUrl>
-          <Select></Select>
-          {/* <PlayListOutput /> */}
+          <Input />
+          <HandleUrl />
+          <Select />
       
-          <CuratorPlayList />
-
           {/* 큐레이터 전환 */}
           <Curator />
           <CuratorPlayList />
 
-          {/* Search 결과 페이지 */}
-          {/* <ResultPage /> */}
 
          </div>
        </div>

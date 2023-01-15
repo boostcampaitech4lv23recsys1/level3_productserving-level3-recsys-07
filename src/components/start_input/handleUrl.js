@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Credentials } from '../spotifyAPI/Credentials';
 import axios from 'axios';
-import PlayListOutput from '../output/playlistOutput';
 
 const HandleUrl = () => {
 
   const spotify = Credentials();  
+  const style = "border-radius:12px";
 
   const [token, setToken] = useState('');  
   const [playlistUrl, setPlaylistUrl] = useState('');
   const [playlistData, setPlaylistData] = useState('');
   const [playlist, setPlaylist] = useState('');
+  const [src, setSrc] = useState('');
 
-  const [isButtonClick, setIsButtonClick] = useState(false);
 
   useEffect(() => {
     axios('https://accounts.spotify.com/api/token', {
@@ -26,7 +26,7 @@ const HandleUrl = () => {
     .then(tokenResponse => {      
       setToken(tokenResponse.data.access_token);
     });
-  });  
+  }, [token]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -34,7 +34,6 @@ const HandleUrl = () => {
     const APIBASE = 'https://api.spotify.com/v1/playlists/';
     const playlistID = playlistUrl.split('/').pop();
     const playlistArray = [];
-
 
     fetch(APIBASE + playlistID + '/tracks', {
       headers: {
@@ -44,24 +43,19 @@ const HandleUrl = () => {
       .then((response) => response.json())
       .then((data) => {
         setPlaylistData(data);
-      });
+        data.items.map((trackObj) => playlistArray.push(trackObj.track.name));
+        setPlaylist([...playlistArray]);
 
-    playlistData.tracks.items.map((trackObj) => playlistArray.push(trackObj.track.name));
-    console.log(playlistArray);
-    setPlaylist([...playlistArray]);
+        setSrc(["https://open.spotify.com/embed/playlist/" + playlistUrl + "?utm_source=generator"])
+    
+      });
+    
+    // playlistData가 setPlaylistData에서 안먹혀서 위에서 수정
+    // playlistData.tracks.items.map((trackObj) => playlistArray.push(trackObj.track.name));
+    // setPlaylist([...playlistArray]);
+    // setIsButtonClick(!isButtonClick);
 
   }
-
-  useEffect(() => {
-    console.log('MyComponent re-rendered');
-  }, [isButtonClick]);
-
-
-  const clickHandler = e => {
-    e.preventDefault();
-    setIsButtonClick(!isButtonClick);
-  };
-
 
 
   return (
@@ -70,11 +64,15 @@ const HandleUrl = () => {
         <h4 className='input_url_text'>Enter a Spotify Playlist URL</h4>
         <form onSubmit={handleSubmit}>
           <input className="input_url" type="text" value={playlistUrl} placeholder="Enter Your URL" onChange={(event) => setPlaylistUrl(event.target.value)} />
-          <button id="playlist_submit_button" onClick={clickHandler}> START </button>
-          {/* {isButtonClick && <PlayListOutput src={playlistUrl}/>} */}
+          <button type='submit' id="playlist_submit_button"> START </button>
         </form>
-        <h2>{playlist}</h2>
       </div>
+        <div className="output_playlist">
+            <div className="playlist_cls">
+              <iframe className="iframe_embed" style={{style}} src={src}
+                  width="50%" height="352" frameBorder="0" allowFullScreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            </div>
+        </div>
       
     </div>
   );
