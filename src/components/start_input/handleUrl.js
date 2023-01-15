@@ -9,9 +9,9 @@ const HandleUrl = () => {
 
   const [token, setToken] = useState('');  
   const [playlistUrl, setPlaylistUrl] = useState('');
-  const [playlistData, setPlaylistData] = useState('');
   const [playlist, setPlaylist] = useState('');
   const [src, setSrc] = useState('');
+  const [results, setResults] = useState([]);
 
 
   useEffect(() => {
@@ -28,11 +28,11 @@ const HandleUrl = () => {
     });
   }, [token]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     
     const APIBASE = 'https://api.spotify.com/v1/playlists/';
-    const playlistID = playlistUrl.split('/').pop();
+    const playlistID = playlistUrl.split('/').pop()
     const playlistArray = [];
 
     fetch(APIBASE + playlistID + '/tracks', {
@@ -42,18 +42,14 @@ const HandleUrl = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        setPlaylistData(data);
         data.items.map((trackObj) => playlistArray.push(trackObj.track.name));
         setPlaylist([...playlistArray]);
-
-        setSrc(["https://open.spotify.com/embed/playlist/" + playlistUrl + "?utm_source=generator"])
+        setSrc(["https://open.spotify.com/embed/playlist/" + playlistID + "?utm_source=generator"])
       });
-    
-    // playlistData가 setPlaylistData에서 안먹혀서 위에서 수정
-    // playlistData.tracks.items.map((trackObj) => playlistArray.push(trackObj.track.name));
-    // setPlaylist([...playlistArray]);
-    // setIsButtonClick(!isButtonClick);
 
+    const response = await fetch(`http://localhost:8000/model`);
+    const json = await response.json();
+    setResults(json);
   }
 
 
@@ -72,7 +68,11 @@ const HandleUrl = () => {
                 width="50%" height="352" frameBorder="0" allowFullScreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
           </div>
       </div>
-      
+      <div>
+        {results.map((result) => (
+          <div>{result}</div>
+        ))}
+      </div>  
     </div>
   );
 };
