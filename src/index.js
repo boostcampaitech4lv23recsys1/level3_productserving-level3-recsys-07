@@ -298,7 +298,7 @@ $("#home_page").click(function(){
 
 	var mainToHome = new TimelineMax({});
 	// Hide
-	// mainToHome.fromTo($('.submit_buttom'), 0.5, {opacity: 1, display: 'block', x: 0},
+	// mainToHome.fromTo($('.select_search_submit_button'), 0.5, {opacity: 1, display: 'block', x: 0},
 	// 									{opacity: 0, x: 30, display: 'none', ease: Power2.easeInOut}, 0.5);
 
 	
@@ -307,7 +307,8 @@ $("#home_page").click(function(){
 	// TweenMax.to(".logo-text", 0.5, {x: 250, ease: Expo.easeOut});
 	
 
-	mainToHome.to($('.submit_buttom'), 0.5, {display: 'none', opacity: 0, x: 15, ease: Power2.easeInOut}, 0.5);										
+	// submit_buttom -> select_search_submit_button으로 바꿈
+	mainToHome.to($('.select_search_submit_button'), 0.5, {display: 'none', opacity: 0, x: 15, ease: Power2.easeInOut}, 0.5);										
 
 	mainToHome.to($('.list_box'), 0.5, {display: 'none', opacity: 0, x: 15, ease: Power2.easeInOut}, 0.5);
 
@@ -381,14 +382,11 @@ $(".submit-playlist").click(function(){
 
 })
 
+
+// 클래스명 변경
 // ===== Playlist_url select page to Playlist page
-$("#playlist_submit_button").click(function(){
+$(".submit_button").click(function(){
 	$('.hadleurl_contents').css('display', 'none')
-	// $('.input_url_text').hide()
-	// $('.input_url').hide()
-	// $('#playlist_submit_button').hide()
-
-
 	$('.output_playlist').css('display', 'flex');
 })
 
