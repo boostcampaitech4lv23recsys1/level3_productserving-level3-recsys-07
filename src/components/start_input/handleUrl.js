@@ -62,7 +62,7 @@ const HandleUrl = () => {
         <h4 className='input_url_text'>Enter a Spotify Playlist URL</h4>
         <form onSubmit={handleSubmit}>
           <input className="input_url" type="text" value={playlistUrl} placeholder="Enter Your URL" onChange={(event) => setPlaylistUrl(event.target.value)} />
-          <button type='submit' id="playlist_submit_button"> START </button>
+          <button type='submit' className="submit_button"> START </button>
         </form>
       </div>
       <div className="output_playlist">
