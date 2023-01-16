@@ -4,14 +4,16 @@ import argparse
 import pandas as pd
 from urllib.parse import quote
 from tqdm import tqdm
+import re
+import math
 
 
 def paser_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--id", default='063ea4e006334d1bb7beb69bb9855ff0', type=str, help="client_id")
-    parser.add_argument("--secret", default="8a66fbb488004ed0bdcac9704600af42", type=str, help="client_secret")
-    parser.add_argument("--base_df", default="song_artist_part_0.csv", type=str, help="csv name") # ./data/song_artist_part_2.csv
-    parser.add_argument("--end_df", default="searched_df_part_0.csv", type=str, help="csv name") # ./data/searched_df_part_2.csv
+    parser.add_argument("--id", default='19414745801246ee8f0f83a7c0554290', type=str, help="client_id")
+    parser.add_argument("--secret", default="29252c0598ca4d5fbe55e8e2cf4bfd33", type=str, help="client_secret")
+    parser.add_argument("--base_df", default="song_artist_v2/song_artist_part1.csv", type=str, help="csv name") # ./data/song_artist_part_2.csv
+    parser.add_argument("--end_df", default="searched_df_v2/searched_df_part1.csv", type=str, help="csv name") # ./data/searched_df_part_2.csv
     args = parser.parse_args()
     return args
 
@@ -46,11 +48,11 @@ def search_with_query(
     import re
     
     APIBASE = "https://api.spotify.com/v1/search"
-    pattern = r'\([^)]*\)'
-    artist_q = re.sub(pattern=pattern, repl='', string=artist_name).replace(" ", "")
-    track_q = re.sub(pattern=pattern, repl='', string=track_name).replace(" ", "")
-    query_and = f"{artist_q}{track_q}"
-    query_or = f"{artist_name}|{track_name}"
+    # pattern = r'\([^)]*\)'
+    # artist_q = re.sub(pattern=pattern, repl='', string=artist_name).replace(" ", "")
+    # track_q = re.sub(pattern=pattern, repl='', string=track_name).replace(" ", "")
+    # query_and = f"{artist_q}{track_q}"
+    query_or = f"{artist_name} {track_name}"
     
     try:
         response = requests.get(
@@ -94,6 +96,15 @@ def search_except(track_name, artist_name, search_except):
     return searched_sr
 
 
+def name_check(name:str, type:str):
+    if type == "track":
+        pattern = r'\([^)]*\)'
+        new_name = re.sub(pattern=pattern, repl='', string=name).replace(" ", "").lower()
+    elif type == "artist":
+        new_name = name.replace(" ", "").lower()
+    return new_name
+
+
 def create_df(headers, base_df):
     searched_df = pd.DataFrame(columns=[
         "searched_track_artist",
@@ -103,7 +114,18 @@ def create_df(headers, base_df):
         ])
     excpt_cnt = 0
 
-    for track_name, artist_name in zip(tqdm(base_df.song), base_df.kakao_artist):
+    for track_name, artist_name, track_id, preview_url \
+    in zip(tqdm(base_df.song_name), base_df.artist_name_basket, base_df.searched_track_id, base_df.searched_preview_url):
+        if track_id != "no result":
+            searched_df.loc[len(searched_df)] = pd.Series(
+            {
+                "searched_track_name": track_name, 
+                "searched_track_artist": artist_name, 
+                "searched_track_id": track_id, 
+                "searched_preview_url": preview_url,
+                }
+            )
+            continue
         response = search_with_query(headers, track_name, artist_name)
         
         if response.status_code == 400:
@@ -139,8 +161,8 @@ def create_df(headers, base_df):
         idx = 0
         for searched_track_name, searched_track_artist, searched_track_id, searched_preview_url \
         in zip(searched_track_name, searched_track_artist, searched_track_id, searched_preview_url):
-            if ((searched_track_name.replace(" ", "") in track_name.replace(" ", "")) or (track_name.replace(" ", "") in searched_track_name.replace(" ", "")))\
-            and ((searched_track_artist.replace(" ", "") in artist_name.replace(" ", "")) or (artist_name.replace(" ", "") in searched_track_artist.replace(" ", ""))):
+            if (name_check(searched_track_name, type="track") == name_check(track_name, type="track"))\
+            and ((name_check(searched_track_artist,type="artist") in name_check(artist_name,type="artist")) or (name_check(artist_name,type="artist") in name_check(searched_track_artist,type="artist"))):
                 if searched_track_id is not None and searched_preview_url is not None:
                     index_list.append(idx)
                     continue
@@ -171,6 +193,6 @@ if __name__ == '__main__':
     args = paser_args()
     headers = set_headers(args)
     song_artist_df = pd.read_csv(args.base_df)
-    searched_df = create_df(headers, song_artist_df[:100])
+    searched_df = create_df(headers, song_artist_df[:])
     searched_df.to_csv(args.end_df, index=False)
 
