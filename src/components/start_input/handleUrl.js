@@ -6,10 +6,10 @@ const HandleUrl = () => {
 
   const spotify = Credentials();  
   const style = "border-radius:12px";
+  const playlistArray = [];
 
   const [token, setToken] = useState('');  
   const [playlistUrl, setPlaylistUrl] = useState('');
-  const [playlist, setPlaylist] = useState('');
   const [src, setSrc] = useState('');
   const [results, setResults] = useState([]);
 
@@ -33,9 +33,8 @@ const HandleUrl = () => {
     
     const APIBASE = 'https://api.spotify.com/v1/playlists/';
     const playlistID = playlistUrl.split('/').pop()
-    const playlistArray = [];
 
-    fetch(APIBASE + playlistID + '/tracks', {
+    await fetch(APIBASE + playlistID + '/tracks', {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -43,13 +42,17 @@ const HandleUrl = () => {
       .then((response) => response.json())
       .then((data) => {
         data.items.map((trackObj) => playlistArray.push(trackObj.track.name));
-        setPlaylist([...playlistArray]);
-        setSrc(["https://open.spotify.com/embed/playlist/" + playlistID + "?utm_source=generator"])
+        console.log(`playlistArray: ${playlistArray}`);
+        setSrc(["https://open.spotify.com/embed/playlist/" + playlistID + "?utm_source=generator"]);
       });
-
-    const response = await fetch(`http://localhost:8000/model`);
-    const json = await response.json();
-    setResults(json);
+    
+    const response = await fetch(`http://localhost:8000/items`, {
+      method: 'POST',
+      body: JSON.stringify(playlistArray),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    await response.json().then(data => setResults(data))
+    console.log(`back to front: ${results}`)
   }
 
 
@@ -68,11 +71,6 @@ const HandleUrl = () => {
                 width="50%" height="352" frameBorder="0" allowFullScreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
           </div>
       </div>
-      <div>
-        {results.map((result) => (
-          <div>{result}</div>
-        ))}
-      </div>  
     </div>
   );
 };
