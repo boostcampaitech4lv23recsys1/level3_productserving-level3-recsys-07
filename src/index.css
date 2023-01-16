@@ -880,7 +880,51 @@ img.track {
   color: #fff9e1;
 }
 
+/* Search Container */
+#search_container{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  align-items: center;
+  text-align: center;
+  color: #252121;
+  display: none;
+}
 
+#search_container .search_content{
+  position: absolute;
+  top: 25%;
+  width: 100%;
+  height: 50vh;
+  display: inline;
+}
+
+#search_container .search_content .search_input{
+  position: relative;
+  width: 25%;
+  text-align: center;
+  display: inline;
+}
+
+#search_list_box_wrapper{
+  position: relative;
+  width: 25%;
+  text-align: center;
+  align-items: center;
+  display: inline;
+}
+
+#search_container .list-group{
+  text-align: center;
+  align-items: center;
+}
+
+
+#search_container .list-group-item{
+  width: 50%;
+  text-align: center;
+  align-items: center;
+}
 
 
 

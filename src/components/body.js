@@ -11,6 +11,7 @@ import Curator from "./curator";
 import Input from "./start_input/input"
 import HandleUrl from "./start_input/handleUrl"
 import Select from "./start_input/select"
+import Search from "./start_input/search";
 
 import CuratorPlayList from "./curatorPlayList";
 
@@ -47,6 +48,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
           {/* Start Input 페이지 */}
           <Input />
           <HandleUrl />
+          <Search />
           <Select />
       
           {/* 큐레이터 전환 */}
