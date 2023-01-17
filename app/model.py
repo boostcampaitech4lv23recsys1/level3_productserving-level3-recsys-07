@@ -50,6 +50,8 @@ def get_model_rec(model, input_ids, top_k) -> EASE:
     result = [id2item[i] for i in result[0]]
     return result
 
+    return result
+
 def get_random_rec(top_k):
     top_k = int(top_k)
     train = pd.read_csv("app_mission/poster.csv", sep="\t")

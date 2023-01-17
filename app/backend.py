@@ -42,7 +42,7 @@ async def receive_items(request: Request):
         items = await request.json()
     except JSONDecodeError as e:
         raise HTTPException(status_code=400, detail=str(e))
-    print(f'items: {items}')
+    
     return {"items": items}
 
 
@@ -50,7 +50,7 @@ async def receive_items(request: Request):
 @app.post("/recplaylist", description="추천을 요청합니다.", response_model=InferenceTrack)
 async def make_track(request: Request):
     try:
-        inputs = await request.json()
+        input_tracks = await request.json()
     except JSONDecodeError as e:
         raise HTTPException(status_code=400, detail=str(e))
     
