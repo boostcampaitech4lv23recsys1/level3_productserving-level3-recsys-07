@@ -48,7 +48,7 @@ async def receive_items(request: Request):
 
 
 @app.post("/recplaylist", description="추천을 요청합니다.", response_model=InferenceTrack)
-async def make_track(request: Request):
+async def make_inference_track(request: Request):
     try:
         input_tracks = await request.json()
     except JSONDecodeError as e:
