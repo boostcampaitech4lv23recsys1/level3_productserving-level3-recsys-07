@@ -9,7 +9,7 @@ const HandleUrl = () => {
   const playlistArray = [];
 
   const [token, setToken] = useState('');  
-  const [playlistUrl, setPlaylistUrl] = useState('');
+  const [playlistUrl, setPlaylistUrl] = useState('https://open.spotify.com/playlist/6i37SY1yWdDhzVHBUFX4Rq');
   const [src, setSrc] = useState('');
   const [results, setResults] = useState([]);
 
@@ -46,13 +46,13 @@ const HandleUrl = () => {
         setSrc(["https://open.spotify.com/embed/playlist/" + playlistID + "?utm_source=generator"]);
       });
     
-    const response = await fetch(`http://localhost:8000/items`, {
+    const response = await fetch(`http://localhost:8000/recplaylist`, {
       method: 'POST',
       body: JSON.stringify(playlistArray),
       headers: { 'Content-Type': 'application/json' },
     });
-    await response.json().then(data => setResults(data))
-    console.log(`back to front: ${results}`)
+
+    await response.json().then((data)=>setResults(data.result))
   }
 
 
@@ -70,6 +70,11 @@ const HandleUrl = () => {
             <iframe className="iframe_embed" style={{style}} src={src}
                 width="50%" height="352" frameBorder="0" allowFullScreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
           </div>
+      </div>
+      <div>
+        {results.map((result) => (
+          <div>{result}</div>
+        ))}
       </div>
     </div>
   );

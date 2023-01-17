@@ -25,7 +25,7 @@ class EASE:
 
 def get_model_rec(model, input_ids, top_k) -> EASE:
     """Model을 가져옵니다"""
-    train = pd.read_csv("app_mission/train_ratings.csv")
+    train = pd.read_csv("../data/train/kakao_song_data2.csv")[:100]
     users = train['user'].unique()
     items = train['item'].unique()
 
@@ -48,13 +48,15 @@ def get_model_rec(model, input_ids, top_k) -> EASE:
     result[Y.nonzero()] = np.inf  # 이미 어떤 한 유저가 클릭 또는 구매한 아이템 이력은 제외
     result = result.argsort()[:,:top_k]
     result = [id2item[i] for i in result[0]]
-
-    df = pd.read_csv("app_mission/poster.csv", sep='\t')
-    
-    return df[df["item"].isin(result)]
+    return result
 
 def get_random_rec(top_k):
     top_k = int(top_k)
     train = pd.read_csv("app_mission/poster.csv", sep="\t")
     train.fillna("", inplace=True)
     return train.sample(top_k)
+
+if __name__ == "__main__":
+    model = EASE()
+    tmp = [525514, 562083, 297861]
+    result = get_model_rec(model=model, input_ids=tmp, top_k=10)
