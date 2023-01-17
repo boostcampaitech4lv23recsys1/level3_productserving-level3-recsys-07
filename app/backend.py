@@ -12,7 +12,7 @@ from model import EASE, get_model_rec, get_random_rec
 from datetime import datetime
 import uvicorn
 
-
+import pymysql
 
 app = FastAPI()
 
@@ -120,6 +120,41 @@ async def make_track(request: Request, model: EASE=Depends(get_model_rec)):
 
 orders = []
 # 실무에서는 보통 이 경우에 데이터베이스를 이용해서 주문을 저장하지만, 데이터베이스를 따로 학습하지 않았으므로 In Memory인 리스트에 저장
+
+# database connection
+conn = pymysql.connect(
+    host='database-2.csf4gv44uzg9.ap-northeast-2.rds.amazonaws.com',
+    port=3306,
+    charset='utf8',
+    user='admin',
+    passwd='wjdtmddus1!',
+    db='test_final'
+)
+
+# database cursor
+cursor = conn.cursor()
+
+# 노래를 클릭으로 받아올 경우 (모델에 들어갈 인풋)
+@app.post("/trackList")
+async def songList(trackList:list):
+    print(trackList)
+    return trackList
+
+
+# search song (노래 검색을 위함)
+@app.post("/searchSong/{song}")
+async def songList(song: str):
+    sql = f"""
+            SELECT JSON_OBJECT('track_name', searched_track_name, 'track_id', searched_track_id)
+            FROM test 
+            WHERE searched_track_name 
+            LIKE '%{song}%' 
+            LIMIT 10
+            """
+    cursor.execute(sql)
+    res = cursor.fetchall()
+
+    return res
 
 
 if __name__=="__main__":

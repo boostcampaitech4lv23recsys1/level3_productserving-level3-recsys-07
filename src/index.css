@@ -610,20 +610,6 @@ body {
   opacity: 0;
 }
 
-
-.curator_player_item {
-  padding: 0 50px;
-  position: fixed;
-  top: 75%;
-  margin-bottom: 17.55vh;
-  margin-top: -6.6666666667vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50vw;
-  height: 50vh;
-}
-
 .connect_btn {
   border-radius: 50%;
   width: 18vh;
@@ -673,17 +659,21 @@ body {
   display: flex;
   align-items: center;
 }
+
 .curator_list_content .item {
   cursor: pointer;
   height: 25vh;
   margin: 0 20px;
 }
+
 .curator_list_content .item:active {
   transform: scale(0.95);
 }
+
 .curator_list_content .info {
   opacity: 0;
 }
+
 .curator_list_content .info .name, .curator_list_content .info .desc {
   font-size: 13px;
   color: #f1dfdd;
@@ -696,6 +686,7 @@ body {
   clear: both;
   border-radius: 3px 3px 0px 0px;
 }
+
 .curator_list_content .thumb {
   border-radius: 50%;
   width: 18vh;
@@ -828,6 +819,7 @@ img.track {
 }
 
 
+
 #handleurl_container {
   display: none;
   width: 100%;
@@ -873,7 +865,8 @@ img.track {
   outline: none;
 }
 
-#handleurl_container .hadleurl_contents button {
+
+.submit_button {
   width: 50%;
   cursor: pointer;
   padding: 2px;
@@ -882,35 +875,143 @@ img.track {
   transition: all 0.5s;
 }
 
-#handleurl_container .hadleurl_contents button:hover {
+.submit_button:hover {
   background-color: #33476a;
   color: #fff9e1;
 }
 
+/* Search Container */
+#search_container{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  align-items: center;
+  text-align: center;
+  color: #252121;
+  display: none;
+}
+
+#search_container .search_content{
+  position: absolute;
+  top: 25%;
+  width: 100%;
+  height: 50vh;
+  display: inline;
+}
+
+#search_container .search_content .search_input{
+  position: relative;
+  width: 25%;
+  text-align: center;
+  display: inline;
+}
+
+#search_list_box_wrapper{
+  position: relative;
+  width: 25%;
+  text-align: center;
+  align-items: center;
+  display: inline;
+}
+
+#search_container .list-group{
+  text-align: center;
+  align-items: center;
+}
+
+
+#search_container .list-group-item{
+  width: 50%;
+  text-align: center;
+  align-items: center;
+}
+
+
+
+/* select Container */
 #select_container {
   width: 100%;
   height: 100%;
   position: absolute;
-  text-align: center;
+  align-items: left;
+  text-align: left;
   color: #252121;
   display: none;
   z-index: 1;
 }
 
 
-#select_container .drop_down_div {
+#select_container .select_content{
   padding: 0 50px;
   position: fixed;
   top: 25%;
-  left: 25%;
-  align-items: center;
-  justify-content: center;
-  width: 50vw;
+  align-items: left;
+  justify-content: left;
+  width: 100%;
   height: 50vh;
   flex-direction: column;
+  display: inline;
+}
+
+#select_container .select_content .drop_down_div {
+  padding-left: 0 50px;
+  position: relative;
+  width: 25%;
+  height: 50vh;
+  flex-direction: column;
+  display:inline-block;
 }
 
 
+.select_container .select_content .track_detail_list {
+  padding-left: 15px;
+  margin-left: 20px;
+  position: absolute;
+  top: 10%;
+  align-items: center;
+  justify-content: center;
+  width: 25%;
+  height: 50vh;
+  flex-direction: column;
+  display: inline-block;
+}
+
+#select_container .drop_down_div .submit_button_wrapper{
+  width: 100%;
+  cursor: pointer;
+  align-items: center;
+  padding-top: 100px;
+  padding: 2px;
+  border: none;
+  border-radius: 10px;
+  transition: all 0.5s;
+  display:block;
+}
+
+
+
+/* select search button */
+#select_container .drop_down_div .submit_button{
+  width: 100%;
+  cursor: pointer;
+  align-items: center;
+  padding-top: 100px;
+  padding: 2px;
+  border: none;
+  border-radius: 10px;
+  transition: all 0.5s;
+}
+
+#select_container .drop_down_div .submit_button:hover {
+  background-color: #33476a;
+  color: #fff9e1;
+}
+
+
+
+
+
+/* url_playlist */
 .output_playlist {
   width: 100%;
   height: 100%;
@@ -943,7 +1044,7 @@ img.track {
   justify-content: center;
 }
 
-
+/* 큐레이터 */
 .curator_playlist {
   width: 100%;
   height: 100%;
@@ -964,7 +1065,7 @@ img.track {
 }
 
 
-.curator_playlist .playlist_cls .iframe_embed{
+.curator_playlist .playlist_cls .iframe_embed {
   padding: 0 50px;
   position: fixed;
   top: 25%;

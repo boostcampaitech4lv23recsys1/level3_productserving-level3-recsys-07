@@ -11,7 +11,7 @@ const Navigation = (e) => {
           </a>
         </li>
         <li>
-          <a className="nav_link" id="select_music_page">
+          <a className="nav_link" id="search_music_page">
             Search Music
           </a>
         </li>
