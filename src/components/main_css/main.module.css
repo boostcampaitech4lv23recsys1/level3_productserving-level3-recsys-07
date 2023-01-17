@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Oswald:300,400,700");
+/* @import url("https://fonts.googleapis.com/css?family=Oswald:300,400,700");
 i[class^=btn] {
   font-size: 20px;
   margin-right: 30px;
@@ -639,7 +639,6 @@ body {
   justify-content: center;
   width: 50vw;
   height: 50vh;
-  /* margin: 0 20px; */
 }
 
 .connect_btn {

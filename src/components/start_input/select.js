@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import Dropdown from './spotifyAPI/Dropdown';
-import Listbox from './spotifyAPI/Listbox';
-import Detail from './spotifyAPI/Detail';
-import { Credentials } from './spotifyAPI/Credentials';
+import Dropdown from '../spotifyAPI/Dropdown';
+import Listbox from '../spotifyAPI/Listbox';
+import Detail from '../spotifyAPI/Detail';
+import { Credentials } from '../spotifyAPI/Credentials';
 import axios from 'axios';
-import "./main_css/main.module.css";
 
-const Search = () => {
+const Select = () => {
   
   const spotify = Credentials();  
 
@@ -15,6 +14,8 @@ const Search = () => {
   const [playlist, setPlaylist] = useState({selectedPlaylist: '', listOfPlaylistFromAPI: []});
   const [tracks, setTracks] = useState({selectedTrack: '', listOfTracksFromAPI: []});
   const [trackDetail, setTrackDetail] = useState(null);
+
+  const [trackList, setTrackList] = useState([]);
 
   useEffect(() => {
 
@@ -38,8 +39,7 @@ const Search = () => {
           selectedGenre: genres.selectedGenre,
           listOfGenresFromAPI: genreResponse.data.categories.items
         })
-      });
-      
+      })
     });
 
   }, [genres.selectedGenre, spotify.ClientId, spotify.ClientSecret]); 
@@ -61,11 +61,9 @@ const Search = () => {
       })
     });
 
-    console.log(val);
   }
 
   const playlistChanged = val => {
-    console.log(val);
     setPlaylist({
       selectedPlaylist: val,
       listOfPlaylistFromAPI: playlist.listOfPlaylistFromAPI
@@ -90,41 +88,56 @@ const Search = () => {
   }
 
   const listboxClicked = val => {
-
     const currentTracks = [...tracks.listOfTracksFromAPI];
-
     const trackInfo = currentTracks.filter(t => t.track.id === val);
 
     setTrackDetail(trackInfo[0].track);
-
-
-
+    setTrackList(prevArray => [...prevArray, trackInfo[0].track.name]);
   }
 
-  
-  
+  const resultButtonClicked = (trackList) => {
+    if (trackList.length < 5){
+      alert("Select More than 5");
+    }
+    else {
+      fetch('http://localhost:8000/trackList', {
+        method: "POST",
+        body: JSON.stringify(trackList) ,
+        headers: { "Content-Type": "application/json" }
+      })
+      .then(response => response.json())
+      .then(data => {
+          console.log(data)
+      })
+      .catch(error => {
+          console.error('Error:', error)
+      })
+    }
+  }
 
   return (
-    <div className="container" id='search_container'>
+    <div className="select_container" id='select_container'>
       <form onSubmit={buttonClicked}>
-        <div className='drop_down_div'>
-          <Dropdown label="Genre :" options={genres.listOfGenresFromAPI} selectedValue={genres.selectedGenre} changed={genreChanged} />
-          <Dropdown label="Playlist :" options={playlist.listOfPlaylistFromAPI} selectedValue={playlist.selectedPlaylist} changed={playlistChanged} />
-            <div className="col-sm-6 row form-group px-0">
-              <button type='submit' className="btn btn-success col-sm-12" id='submit_buttom'>
-                Search
-              </button>
-            </div>
-            <div className="row">
-              <Listbox items={tracks.listOfTracksFromAPI} clicked={listboxClicked} />
-              {trackDetail && <Detail {...trackDetail} /> }
-            </div>        
+        <div className='select_content'>
+          <div className='drop_down_div'>
+            <Dropdown label="Genre" options={genres.listOfGenresFromAPI} selectedValue={genres.selectedGenre} changed={genreChanged} />
+            <Dropdown label="Playlist" options={playlist.listOfPlaylistFromAPI} selectedValue={playlist.selectedPlaylist} changed={playlistChanged} />
+            <button type='submit' className="submit_button" id='select_search_submit_button'>
+              Search
+            </button>
           </div>
+          <div className="track_detail_list">
+            <Listbox items={tracks.listOfTracksFromAPI} clicked={listboxClicked} />
+            {trackDetail && <Detail {...trackDetail}/>}
+            {/* <button id="submit_result_on_select_item"><span>PlayList URL</span> RESULT </button> */}
+          </div>
+          <div className='submit_button_wrapper'>
+            <button className='submit_button' onClick={() => resultButtonClicked(trackList)}> START </button>
+          </div>
+        </div>
       </form>
     </div>
-    
-    
   );
 }
 
-export default Search;
+export default Select;
