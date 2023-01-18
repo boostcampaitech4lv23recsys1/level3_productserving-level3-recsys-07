@@ -52,7 +52,7 @@ const HandleUrl = () => {
       headers: { 'Content-Type': 'application/json' },
     });
 
-    await response.json().then((data)=>setResults(data.result))
+    await response.json().then((data)=>setResults(data))
   }
 
 
