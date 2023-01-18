@@ -60,7 +60,7 @@ async def make_inference_track(request: Request):
     print('inferece start')
     
     inference_result = get_model_rec(model=model, input_ids=tmp, top_k=10)
-    inference_result = np.array(inference_result).tolist()
+    inference_result = inference_result
     
     rec_playlists = id2track_name(inference_result)
     print(rec_playlists)

@@ -48,8 +48,7 @@ def get_model_rec(model, input_ids, top_k) -> EASE:
     result[Y.nonzero()] = np.inf  # 이미 어떤 한 유저가 클릭 또는 구매한 아이템 이력은 제외
     result = result.argsort()[:,:top_k]
     result = [id2item[i] for i in result[0]]
-    return result
-
+    
     return result
 
 def get_random_rec(top_k):
