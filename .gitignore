@@ -205,3 +205,4 @@ poetry.toml
 
 **/*.csv
 **/*.json
+**/app/chromedriver.exe
