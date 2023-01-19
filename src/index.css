@@ -1017,11 +1017,70 @@ img.track {
   height: 100%;
   position: absolute;
   text-align: center;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   display: none;
 }
 
 
 .output_playlist .playlist_cls {
+  position: relative;
+  text-align: center;
+  font-size: 14px;
+  width: 100%;
+  height: 65%;
+  -webkit-overflow-scrolling: touch;
+  white-space: nowrap;
+  margin-bottom: 10%;
+}
+
+.playlist_cls .playlist_content_div{
+  position: relative;
+  width: 100%;
+  height: 80%;
+}
+
+.playlist_cls .playlist_content_div2{
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 20%;
+}
+
+.output_playlist .playlist_cls .iframe_embed{
+  padding: 0 50px;
+  position: fixed;
+  top: 25%;
+  left: 25%;
+  margin-top: -6.6666666667vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.playlist_cls .submit_button{
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  width: 15%;
+  height: 35%;
+}
+
+
+
+/* url_playlist */
+.recommand_result_playlist {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  text-align: center;
+  display: none;
+}
+
+
+.recommand_result_playlist .playlist_cls {
   position: relative;
   text-align: center;
   font-size: 14px;
@@ -1032,7 +1091,7 @@ img.track {
 }
 
 
-.output_playlist .playlist_cls .iframe_embed{
+.recommand_result_playlist .playlist_cls .iframe_embed{
   padding: 0 50px;
   position: fixed;
   top: 25%;
@@ -1043,6 +1102,9 @@ img.track {
   align-items: center;
   justify-content: center;
 }
+
+
+
 
 /* 큐레이터 */
 .curator_playlist {
