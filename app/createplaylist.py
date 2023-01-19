@@ -10,6 +10,7 @@ import subprocess, re
 
 # 플레이 리스트를 생성하고 안에 노래는 하나씩 추가해주는 방식
 def createCustomPlayList(headers, new_playlist:list=[]):
+    print("headers : ", headers)
     spotify_user_id = "31rzm4yi3fqvvfe236mr2ylmmhje" 
     CREATEPLAYLIST_URL  = f"https://api.spotify.com/v1/users/{spotify_user_id}/playlists"
     
@@ -27,13 +28,10 @@ def createCustomPlayList(headers, new_playlist:list=[]):
 
     # playlist id 저장
     playlist_id = response.json()['id']
-    print("playlist_id : " ,playlist_id)
-
 
     ADDTRACK_URL = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
     uris = ["spotify:track:"+str(track_uri)+"," for track_uri in new_playlist]
     uris = "".join(uris)
-    print("uris : ",uris)
 
     try:
         response = requests.post(f"{ADDTRACK_URL}?uris={uris}", headers=headers)

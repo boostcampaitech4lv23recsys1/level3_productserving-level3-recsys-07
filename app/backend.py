@@ -49,6 +49,7 @@ app.add_middleware(
     allow_headers=["*"],
     )
 
+headers = get_user_access_token_with_scope()
 
 class Track(BaseModel):
     id: UUID = Field(default_factory=uuid4)
@@ -58,8 +59,6 @@ class InferenceTrack(Track):
     id: UUID = Field(default_factory=uuid4)
     name: str = "inference_track_id"
     result: Optional[List]
-    
-headers = get_user_access_token_with_scope()
 
 
 @app.post("/items")
@@ -73,8 +72,10 @@ async def receive_items(request: Request):
     return {"items": items}
 
 
-@app.post("/recplaylist", description="추천을 요청합니다.", response_model=InferenceTrack)
+# @app.post("/recplaylist", description="추천을 요청합니다.", response_model=InferenceTrack)
+@app.post("/recplaylist/", description="추천을 요청합니다.")
 async def make_inference_track(request: Request):
+    global headers
     try:
         input_tracks = await request.json()
     except JSONDecodeError as e:
@@ -82,6 +83,7 @@ async def make_inference_track(request: Request):
     
     model = EASE()
     # tmp = [525514, 562083, 297861]
+    # print("playlistArray : ", playlistArray)
     tmp = ["0KfswiAPot70lal7a3QKrh", "48kRs4L0S1XayLPznidhFF", "0ruPTZe2MuRofCvOnNZIip"]
     
     print('inferece start')

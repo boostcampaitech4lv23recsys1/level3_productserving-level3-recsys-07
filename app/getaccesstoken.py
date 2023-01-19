@@ -25,7 +25,7 @@ def get_user_access_token_with_scope():
 
     chrome_version = re.split('=', chrome_path)[1]
     chrome_version = chrome_version.split(".")[0]
-    print("chrome_version : " ,chrome_version)
+    # print("chrome_version : " ,chrome_version)
 
     client_id = "14ec68df0e4c4bb78ff3bd6554cbf7b5"
     client_secret = "275babf9fd9c43e2aed63bb4d7d38ebd"
@@ -47,8 +47,9 @@ def get_user_access_token_with_scope():
         uc.TARGET_VERSION = chrome_version
         driver = uc.Chrome(options=options)
 
-        key = "jq3210@naver.com"
-        password = "wjdtmddus1!"
+        
+        key = "jq3210@naver.com"    #나중에 env에서 받아오는 걸로 설정
+        password = "wjdtmddus1!"    #나중에 env에서 받아오는 걸로 설정
         driver.get("https://accounts.spotify.com/authorize?" + urlencode(auth_headers))
         driver.find_element(By.XPATH, "/html/body/div[1]/div/div[2]/div/div/div[1]/div[1]/input").send_keys(key)
         driver.find_element(By.XPATH, "/html/body/div[1]/div/div[2]/div/div/div[1]/div[2]/input").send_keys(password)
@@ -60,7 +61,6 @@ def get_user_access_token_with_scope():
             current_url = driver.current_url
             if 'code=' in current_url:
                 flag = False
-        print("assess token code : ", current_url)
         sindex = current_url.rfind("code=")
         # 실질적인 scope가 지정된 token 가져오기
         code = current_url[sindex + 5:]
@@ -89,5 +89,6 @@ def get_user_access_token_with_scope():
         "Content-Type": "application/json",
         "Authorization": "Bearer {}".format(token)
     }
+
 
     return headers
