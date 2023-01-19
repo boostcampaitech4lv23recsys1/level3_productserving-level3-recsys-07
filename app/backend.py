@@ -11,7 +11,18 @@ import uvicorn
 import pymysql
 import numpy as np
 
-from createplaylist import myPlayList
+from createplaylist import createCustomPlayList
+from getaccesstoken import get_user_access_token_with_scope
+
+import os
+import requests
+from urllib.parse import urlencode
+import base64
+import json
+import undetected_chromedriver as uc
+from selenium.webdriver.common.by import By
+from selenium import webdriver
+import subprocess, re
 
 # database connection
 conn = pymysql.connect(
@@ -48,7 +59,8 @@ class InferenceTrack(Track):
     name: str = "inference_track_id"
     result: Optional[List]
     
-    
+headers = get_user_access_token_with_scope()
+
 
 @app.post("/items")
 async def receive_items(request: Request):
@@ -59,7 +71,6 @@ async def receive_items(request: Request):
         raise HTTPException(status_code=400, detail=str(e))
     
     return {"items": items}
-
 
 
 @app.post("/recplaylist", description="추천을 요청합니다.", response_model=InferenceTrack)
@@ -78,8 +89,7 @@ async def make_inference_track(request: Request):
     inference_result = get_model_rec(model=model, input_ids=tmp, top_k=10)
     inference_result = np.array(inference_result).tolist()
     # inference_track = InferenceTrack(result = inference_result)
-    my_playlist = myPlayList()
-    playlist_id = my_playlist.createCustomPlayList(inference_result)
+    playlist_id = createCustomPlayList(headers, inference_result)
     
     return playlist_id
 
