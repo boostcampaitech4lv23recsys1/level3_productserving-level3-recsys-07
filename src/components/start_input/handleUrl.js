@@ -13,6 +13,8 @@ const HandleUrl = () => {
   const [src, setSrc] = useState('');
   const [results, setResults] = useState([]);
 
+  const [recResultSrc, setRecResultSrc] = useState([]);
+
 
   useEffect(() => {
     axios('https://accounts.spotify.com/api/token', {
@@ -50,9 +52,13 @@ const HandleUrl = () => {
       method: 'POST',
       body: JSON.stringify(playlistArray),
       headers: { 'Content-Type': 'application/json' },
-    });
+    })
+    .then((playlist_id) => {
+      console.log("playlist_id : " ,playlist_id)
+      // await fetch(APIBASE + playlist_id + '/tracks', )
+    }
+    )
 
-    await response.json().then((data)=>setResults(data.result))
   }
 
 
@@ -70,12 +76,17 @@ const HandleUrl = () => {
             <iframe className="iframe_embed" style={{style}} src={src}
                 width="50%" height="352" frameBorder="0" allowFullScreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
           </div>
+          <button type='submit' className="submit_button"> GET RECOMMAND </button>
       </div>
-      <div>
+      {/* <div className='recommand_result_playlist'>
+      <div className="playlist_cls">
+            <iframe className="iframe_embed" style={{style}} src={src}
+                width="50%" height="352" frameBorder="0" allowFullScreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+          </div>
         {results.map((result) => (
           <div>{result}</div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };

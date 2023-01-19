@@ -441,4 +441,9 @@ $(".hadleurl_contents .submit_button").click(function(){
 	$('.output_playlist').css('display', 'flex');
 })
 
+// ===== Playlist_url에서 Playlist page
+$(".output_playlist .submit_button").click(function(){
+	$('.output_playlist').css('display', 'none')
+	$('.recommand_result_playlist').css('display', 'flex');
+})
 

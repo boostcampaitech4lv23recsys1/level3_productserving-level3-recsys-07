@@ -11,6 +11,21 @@ import uvicorn
 import pymysql
 import numpy as np
 
+from createplaylist import myPlayList
+
+# database connection
+conn = pymysql.connect(
+    host='database-2.csf4gv44uzg9.ap-northeast-2.rds.amazonaws.com',
+    port=3306,
+    charset='utf8',
+    user='admin',
+    passwd='wjdtmddus1!',
+    db='test_final'
+)
+
+# database cursor
+cursor = conn.cursor()
+
 app = FastAPI()
 
 origins =['*']
@@ -55,29 +70,19 @@ async def make_inference_track(request: Request):
         raise HTTPException(status_code=400, detail=str(e))
     
     model = EASE()
-    tmp = [525514, 562083, 297861]
+    # tmp = [525514, 562083, 297861]
+    tmp = ["0KfswiAPot70lal7a3QKrh", "48kRs4L0S1XayLPznidhFF", "0ruPTZe2MuRofCvOnNZIip"]
     
     print('inferece start')
     
     inference_result = get_model_rec(model=model, input_ids=tmp, top_k=10)
     inference_result = np.array(inference_result).tolist()
-    inference_track = InferenceTrack(result = inference_result)
-    print(inference_track)
-    return inference_track
+    # inference_track = InferenceTrack(result = inference_result)
+    my_playlist = myPlayList()
+    playlist_id = my_playlist.createCustomPlayList(inference_result)
+    
+    return playlist_id
 
-
-# database connection
-conn = pymysql.connect(
-    host='database-2.csf4gv44uzg9.ap-northeast-2.rds.amazonaws.com',
-    port=3306,
-    charset='utf8',
-    user='admin',
-    passwd='wjdtmddus1!',
-    db='test_final'
-)
-
-# database cursor
-cursor = conn.cursor()
 
 # 노래를 클릭으로 받아올 경우 (모델에 들어갈 인풋)
 @app.post("/trackList")
