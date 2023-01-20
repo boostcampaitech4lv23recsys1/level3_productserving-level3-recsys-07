@@ -16,7 +16,7 @@ import Search from "./start_input/search";
 import CuratorPlayList from "./curatorPlayList";
 import axios from "axios";
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; 
 
   const Body = (e) => {
   return (
