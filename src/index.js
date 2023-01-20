@@ -21,7 +21,6 @@ reportWebVitals(sendToVercelAnalytics);
 
 // ===== Open Nav =====
 $( ".burger-wrapper" ).click(function() {
-	
 	// ===== If Nav is not open	
 	if($('.nav').css("display") === "none"){
 		TweenMax.to(".dim", 0.5, {opacity: 1, display: 'block', ease: Power2.easeInOut});
@@ -155,7 +154,6 @@ $('.item').hover(function(){
 
 // ===== Home Page to Curation Page Transition  =====
 // ===== Main Play Button Activate =====
-
 $('.text-wrap .text').click(function(){
 	
 	var homeToMain = new TimelineMax({});
@@ -203,9 +201,8 @@ $('.item').click(function(){
 });
 
 // ===== Back Button Activate =====
-
 $('.back_btn').click(function(){
-// ===== From Playlist(3) to Main(2)
+// ===== From 큐레이터 Playlist(3) to Main(2)
 	if($('.curator_playlist').css("display") !== "none"){
 		var playlistToMain = new TimelineMax({});
 	
@@ -214,11 +211,10 @@ $('.back_btn').click(function(){
 
 		// show curator list
 		playlistToMain.fromTo($('#curator'), 0.8, {display: 'none', opacity: 0, scale: 1.1}, 
-											{display: 'block', opacity: 1, scale: 1, ease: Power2.easeInOut}, 0)
+											{display: 'block', opacity: 1, scale: 1, ease: Power2.easeInOut}, 0);
 
 		playlistToMain.fromTo($('.curator_list'), 0.8, {display: 'none', opacity: 0, scale: 1.1}, 
-											{display: 'block', opacity: 1, scale: 1, ease: Power2.easeInOut}, 0)
-
+											{display: 'block', opacity: 1, scale: 1, ease: Power2.easeInOut}, 0);
 	}
 
 	// Search Page에서 Home으로
@@ -248,14 +244,13 @@ $('.back_btn').click(function(){
 		startInputToHome.to($('#start_input_container'), 0.8, {display: 'none', opacity: 0, scale: 1.1, ease: Power2.easeInOut}, 0);
 		startInputToHome.to($('#handleurl_container'), 0.8, {display: 'none', opacity: 0, scale: 1.1, ease: Power2.easeInOut}, 0);
 		startInputToHome.to($('#select_container'), 0.8, {display: 'none', opacity: 0, scale: 1.1, ease: Power2.easeInOut}, 0);
+		startInputToHome.to($('.back_btn'), 0.5, {display: 'none', opacity: 0, x: 15, ease: Power2.easeInOut}, 0.5);
 
 		// Background Up
 		startInputToHome.to($('.wave-container'), 1, {yPercent: 0, ease: Power2.easeInOut}, 1);
 
 		// 	Show
 		startInputToHome.to($('.text-wrap'), 0.5, {display: 'flex', opacity: 1, y: 0, ease: Power2.easeInOut}, 1.2);
-
-		// startInputToHome.to($('.logo-text, .line'), 0.5, {display: 'block', opacity: 1, y: 0, ease: Power2.easeInOut}, 1.2);
 
 		// 	Force to redraw by using y translate
 		startInputToHome.fromTo($('.text-wrap .text'), 0.1, {y: 0.1, position: 'absolute'},
@@ -271,9 +266,12 @@ $('.back_btn').click(function(){
 
 		// Show
 		playlistUrlToStartInput.to($('#start_input_container'), 0.5, {display: 'flex', opacity: 1, y: 0, ease: Power2.easeInOut}, 1.2);
-		playlistUrlToStartInput.to($('#playlist_url'), 0.5, {display: 'flex', opacity: 1, y: 0, ease: Power2.easeInOut}, 1.2);
-		playlistUrlToStartInput.to($('#playlist_select'), 0.5, {display: 'flex', opacity: 1, y: 0, ease: Power2.easeInOut}, 1.2);
 
+		playlistUrlToStartInput.fromTo($('#playlist_url'), 0.8, {opacity: 0, x: 15},
+					{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
+
+		playlistUrlToStartInput.fromTo($('#playlist_select'), 0.8, {opacity: 0, x: 15},
+					{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);			
 	}
 	
 	// From Main(2) to Home(1)
@@ -297,12 +295,9 @@ $('.back_btn').click(function(){
 		// 	Show
 		mainToHome.to($('.text-wrap'), 0.5, {display: 'flex', opacity: 1, y: 0, ease: Power2.easeInOut}, 1.2);
 
-		// mainToHome.to($('.logo-text, .line'), 0.5, {display: 'block', opacity: 1, y: 0, ease: Power2.easeInOut}, 1.2);
-
 		// 	Force to redraw by using y translate
 		mainToHome.fromTo($('.text-wrap .text'), 0.1, {y: 0.1, position: 'absolute'},
 											{y: 0, position: 'relative', ease: Power2.easeInOut}, 1.3);
-		// $('.text-wrap .text').css('position', 'relative');
 	}
 });
 
@@ -310,11 +305,14 @@ $('.back_btn').click(function(){
 // ===== Home Page Click =====
 $("#home_page").click(function(){
 
+	$('#search_container').hide();
 	$('#start_input_container').hide();
 	$('#handleurl_container').hide()
 	$('#select_container').hide()
 	$('#curator').hide()
-	$('#back_btn').hide()
+	$('.back_btn').hide()
+
+
 
 	var mainToHome = new TimelineMax({});
 	// Hide
@@ -351,9 +349,8 @@ $("#home_page").click(function(){
 
 // ===== Search page  =====
 $('#search_music_page').click(function(){
-	// $("#search_container").show();
-
 	$('#handleurl_container').hide();
+	$('#start_input_container').hide();
 	$("#search_container").hide();
 	$('#select_container').hide();
 	$('#curator').hide();
@@ -370,10 +367,10 @@ $('#search_music_page').click(function(){
 	TweenMax.to(".nav", 0.5, {xPercent: -100, display:'none', ease: Expo.easeOut});
 
 
-	mainToSearch.fromTo($('#search_container'), 0.8, {x: 15},
+	mainToSearch.fromTo($('#search_container'), 0.8, {opacity:0, x: 15},
 		{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
 
-	mainToSearch.fromTo($('.back_btn'), 0.8, {x: 15},
+	mainToSearch.fromTo($('.back_btn'), 0.8, {opacity:0, x: 15},
 		{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
 
 })
@@ -382,16 +379,10 @@ $('#search_music_page').click(function(){
 // ===== Start input page for input url and select your own  =====
 // ===== main to input =====
 $("#start_input_page").click(function(){
-
-	$('#start_input_container').show()
-	$('#playlist_url').show()
-	$('#playlist_select').show()
-
 	$('#handleurl_container').hide()
 	$("#search_container").hide()
 	$('#select_container').hide()
 	$('#curator').hide()
-
 
 	var mainToInput = new TimelineMax({});
  
@@ -402,35 +393,76 @@ $("#start_input_page").click(function(){
 	mainToInput.to($('.wave-container'), 1, {yPercent: 30, ease: Power2.easeInOut}, 0);
 
 	// Show
-	// mainToInput.to($('.logo-text, .line'), 0.5, {display: 'block', opacity: 1, y: 0, ease: Power2.easeInOut}, 1.2);
-
 	TweenMax.to(".dim", 0.5, {opacity: 0, display: 'none', ease: Power2.easeInOut});
 	TweenMax.to(".nav", 0.5, {xPercent: -100, display:'none', ease: Expo.easeOut});
 
+	mainToInput.fromTo($('#start_input_container'), 0, {x: 15},
+		{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 0);	
 
-	mainToInput.fromTo($('.back_btn'), 0.8, {x: 15},
+	mainToInput.fromTo($('#playlist_url'), 0.8, {opacity: 0, x: 15},
+		{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);	
+		
+	mainToInput.fromTo($('#playlist_select'), 0.8, {opacity: 0, x: 15},
+		{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);			
+
+	mainToInput.fromTo($('.back_btn'), 0.8, {opacity: 0, x: 15},
 		{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
-	
 });
 
-
+// 인풋에서 Playlist url 클릭할 경우
 $("#playlist_url").click(function(){
-	$('#start_input_container').hide()
-	$('#handleurl_container').css('display', 'flex')
-	
+	// $('#handleurl_container').css('display', 'flex');
+
+	var inputToUrl = new TimelineMax({});
+ 
+	// Hide
+	$('#start_input_container').hide();
+	// inputToUrl.to($('.text-wrap'), 0.5, {display: 'none', opacity: 0, y: -20, ease: Power2.easeInOut}, 0);	
+
+	// Show
+	inputToUrl.fromTo($('#handleurl_container'), 0.8, {opacity: 0, x: 30},
+		{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 0.5);
 });
+
+// ===== Playlist_url에서 Playlist page
+$(".hadleurl_contents .submit_button").click(function(){
+	// $('.output_playlist').hide();
+	// $('.output_playlist').css('display', 'none')
+	var urlStartToGetPlayList = new TimelineMax({});
+
+	// Hide
+	$('.hadleurl_contents').hide();
+
+	// Show
+	urlStartToGetPlayList.fromTo($('.output_playlist'), 0.8, {opacity: 0, x: 30},
+		{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 0.5);	
+
+})
+
+// ===== URL에서 start누른 후 나의 Playlist에서 추천 받은 Playlist page로 전환
+$(".output_playlist .submit_button").click(function(){
+	var urlStartToGetRecPlayList = new TimelineMax({});
+
+	// Hide
+	$('.output_playlist').hide();
+
+	// Show
+	urlStartToGetRecPlayList.fromTo($('.recommand_result_playlist'), 0.8, {opacity: 0, x: 30},
+		{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 0.5);	
+})
+
+
 
 $("#playlist_select").click(function(){
-	$('#start_input_container').hide()
-	$('#select_container').css('display', 'flex')
+	$('#start_input_container').hide();
+	$('#select_container').css('display', 'flex');
 });
 
 
 // select에서 playlist를 가져오기 위한 버튼 클릭
 $(".submit-playlist").click(function(){
-	$('#select_container').hide()
-	$('#playList').css('display', 'flex')
-
+	$('#select_container').hide();
+	$('#playList').css('display', 'flex');
 })
 
 
@@ -440,10 +472,3 @@ $(".hadleurl_contents .submit_button").click(function(){
 	$('.hadleurl_contents').css('display', 'none')
 	$('.output_playlist').css('display', 'flex');
 })
-
-// ===== Playlist_url에서 Playlist page
-$(".output_playlist .submit_button").click(function(){
-	$('.output_playlist').css('display', 'none')
-	$('.recommand_result_playlist').css('display', 'flex');
-})
-

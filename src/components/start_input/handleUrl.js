@@ -101,7 +101,6 @@ const HandleUrl = () => {
 
       <div className='recommand_result_playlist'>
         <div className="playlist_cls">
-  
               <iframe className="iframe_embed" style={{style}} src={newPlayListSrc}
                   width="50%" height="352" frameBorder="0" allowFullScreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
             </div>
