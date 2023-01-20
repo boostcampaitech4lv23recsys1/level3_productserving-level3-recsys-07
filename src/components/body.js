@@ -14,6 +14,7 @@ import Select from "./start_input/select"
 import Search from "./start_input/search";
 
 import CuratorPlayList from "./curatorPlayList";
+import axios from "axios";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 

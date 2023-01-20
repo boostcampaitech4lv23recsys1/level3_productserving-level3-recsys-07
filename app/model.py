@@ -24,8 +24,50 @@ class EASE:
 
 
 def get_model_rec(model, input_ids, top_k) -> EASE:
+    import pymysql
     """Model을 가져옵니다"""
-    train = pd.read_csv("../data/train/kakao_song_data2.csv")[:100]
+    # train = pd.read_csv("../data/train/kakao_song_data2.csv")[:100]
+
+    # database connection
+    conn = pymysql.connect(
+        host='database-2.csf4gv44uzg9.ap-northeast-2.rds.amazonaws.com',
+        port=3306,
+        charset='utf8',
+        user='admin',
+        passwd='wjdtmddus1!',
+        db='test_final'
+    )
+
+    # database cursor
+    cursor = conn.cursor()
+    sql = """SELECT searched_track_id
+            FROM test 
+            WHERE searched_track_name REGEXP '[가-힇]'  and not searched_track_id = 'not matched' and not searched_track_id = 'code 400'
+            LIMIT 200;"""
+    cursor.execute(sql)
+
+    res = cursor.fetchall()
+    df = pd.DataFrame(res, columns=['item'])
+
+    import random
+    user = []
+    item = []
+    for j in range(100):
+        user.append(j)
+        item.append(list(df.sample(random.randint(5,20))['item'].values))
+        # user[j] = 
+
+    df_dict = {
+        "user" : user,
+        "item" : item
+    }
+
+    res_df = pd.DataFrame(df_dict)
+    train = res_df.explode('item')
+
+
+    # train = pd.DataFrame(res, columns=['user','item'])
+
     users = train['user'].unique()
     items = train['item'].unique()
 
@@ -48,8 +90,6 @@ def get_model_rec(model, input_ids, top_k) -> EASE:
     result[Y.nonzero()] = np.inf  # 이미 어떤 한 유저가 클릭 또는 구매한 아이템 이력은 제외
     result = result.argsort()[:,:top_k]
     result = [id2item[i] for i in result[0]]
-    return result
-
     return result
 
 def get_random_rec(top_k):

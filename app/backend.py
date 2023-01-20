@@ -11,6 +11,32 @@ import uvicorn
 import pymysql
 import numpy as np
 
+from createplaylist import createCustomPlayList
+from getaccesstoken import get_user_access_token_with_scope
+
+import os
+import requests
+from urllib.parse import urlencode
+import base64
+import json
+import undetected_chromedriver as uc
+from selenium.webdriver.common.by import By
+from selenium import webdriver
+import subprocess, re
+
+# database connection
+conn = pymysql.connect(
+    host='database-2.csf4gv44uzg9.ap-northeast-2.rds.amazonaws.com',
+    port=3306,
+    charset='utf8',
+    user='admin',
+    passwd='wjdtmddus1!',
+    db='test_final'
+)
+
+# database cursor
+cursor = conn.cursor()
+
 app = FastAPI()
 
 origins =['*']
@@ -23,6 +49,7 @@ app.add_middleware(
     allow_headers=["*"],
     )
 
+headers = get_user_access_token_with_scope()
 
 class Track(BaseModel):
     id: UUID = Field(default_factory=uuid4)
@@ -32,8 +59,7 @@ class InferenceTrack(Track):
     id: UUID = Field(default_factory=uuid4)
     name: str = "inference_track_id"
     result: Optional[List]
-    
-    
+
 
 @app.post("/items")
 async def receive_items(request: Request):
@@ -46,39 +72,30 @@ async def receive_items(request: Request):
     return {"items": items}
 
 
-
-@app.post("/recplaylist", description="추천을 요청합니다.", response_model=List[str])
+@app.post("/recplaylist/", description="추천을 요청합니다.")
 async def make_inference_track(request: Request):
+    global headers
     try:
         input_tracks = await request.json()
     except JSONDecodeError as e:
         raise HTTPException(status_code=400, detail=str(e))
     
     model = EASE()
-    tmp = [525514, 562083, 297861]
+    # tmp = [525514, 562083, 297861]
+    # print("playlistArray : ", playlistArray)
+    tmp = ["0KfswiAPot70lal7a3QKrh", "48kRs4L0S1XayLPznidhFF", "0ruPTZe2MuRofCvOnNZIip"]
     
     print('inferece start')
     
     inference_result = get_model_rec(model=model, input_ids=tmp, top_k=10)
     inference_result = np.array(inference_result).tolist()
+
+
+    playlist_id = createCustomPlayList(headers, inference_result)
     
-    rec_playlists = id2track_name(inference_result)
-    print(rec_playlists)
-    return rec_playlists
+    return playlist_id
 
 
-# database connection
-conn = pymysql.connect(
-    host='database-1.cpk2m0v8twcq.ap-northeast-2.rds.amazonaws.com',
-    port=3306,
-    charset='utf8',
-    user='admin',
-    passwd='qhtjd357!!',
-    db='test_db'
-)
-
-# database cursor
-cursor = conn.cursor()
 
 # 노래를 클릭으로 받아올 경우 (모델에 들어갈 인풋)
 @app.post("/trackList")

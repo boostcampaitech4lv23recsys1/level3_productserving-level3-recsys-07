@@ -13,6 +13,12 @@ const HandleUrl = () => {
   const [src, setSrc] = useState('');
   const [results, setResults] = useState([]);
 
+  const [newPlayListId, setNewPlayListId] = useState("");
+  const [newPlayListSrc, setNewPlayListSrc] = useState("");
+
+  const APIBASE = 'https://api.spotify.com/v1/playlists/';
+  const playlistID = playlistUrl.split('/').pop()
+
 
   useEffect(() => {
     axios('https://accounts.spotify.com/api/token', {
@@ -28,11 +34,9 @@ const HandleUrl = () => {
     });
   }, [token]);
 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    const APIBASE = 'https://api.spotify.com/v1/playlists/';
-    const playlistID = playlistUrl.split('/').pop()
 
     await fetch(APIBASE + playlistID + '/tracks', {
       headers: {
@@ -46,14 +50,34 @@ const HandleUrl = () => {
         setSrc(["https://open.spotify.com/embed/playlist/" + playlistID + "?utm_source=generator"]);
       });
     
-    const response = await fetch(`http://localhost:8000/recplaylist`, {
+    const response = await fetch(`http://localhost:8000/recplaylist/`, {
       method: 'POST',
       body: JSON.stringify(playlistArray),
       headers: { 'Content-Type': 'application/json' },
+    })
+    .then((response) => response.json())
+    .then((playlist_id) => {
+      setNewPlayListId(playlist_id)
     });
+
 
     await response.json().then((data)=>setResults(data))
   }
+
+
+  useEffect(() => {
+    axios(APIBASE + newPlayListId + '/tracks', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    })
+      .then((data) => {
+        setNewPlayListSrc(["https://open.spotify.com/embed/playlist/" + newPlayListId + "?utm_source=generator"]);
+      });
+  },[newPlayListId])
+
+
+
 
 
   return (
@@ -67,15 +91,24 @@ const HandleUrl = () => {
       </div>
       <div className="output_playlist">
           <div className="playlist_cls">
-            <iframe className="iframe_embed" style={{style}} src={src}
-                width="50%" height="352" frameBorder="0" allowFullScreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            <div className='playlist_content_div'>
+              <iframe className="iframe_embed" style={{style}} src={src}
+                  width="50%" height="100%" frameBorder="0" allowFullScreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            </div>
+            <div className='playlist_content_div2'>
+              <button type='submit' className="submit_button"> GET RECOMMAND </button>
+            </div>
           </div>
+          
       </div>
-      <div>
-        {results.map((result) => (
-          <div>{result}</div>
-        ))}
-      </div>
+
+      <div className='recommand_result_playlist'>
+        <div className="playlist_cls">
+  
+              <iframe className="iframe_embed" style={{style}} src={newPlayListSrc}
+                  width="50%" height="352" frameBorder="0" allowFullScreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            </div>
+        </div>
     </div>
   );
 };
