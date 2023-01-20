@@ -100,5 +100,5 @@ def get_random_rec(top_k):
 
 if __name__ == "__main__":
     model = EASE()
-    tmp = [525514, 562083, 297861]
+    tmp = [525514, 562083, 297861] 
     result = get_model_rec(model=model, input_ids=tmp, top_k=10)
