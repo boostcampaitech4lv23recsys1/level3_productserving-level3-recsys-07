@@ -10,10 +10,10 @@ import math
 
 def paser_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--id", default='19414745801246ee8f0f83a7c0554290', type=str, help="client_id")
-    parser.add_argument("--secret", default="29252c0598ca4d5fbe55e8e2cf4bfd33", type=str, help="client_secret")
-    parser.add_argument("--base_df", default="song_artist_v2/song_artist_part1.csv", type=str, help="csv name") # ./data/song_artist_part_2.csv
-    parser.add_argument("--end_df", default="searched_df_v2/searched_df_part1.csv", type=str, help="csv name") # ./data/searched_df_part_2.csv
+    parser.add_argument("--id", default='6b9dab94cd04470fbe8086626bdd230b', type=str, help="client_id")
+    parser.add_argument("--secret", default="615cf34912b74d44a45986937c5c0a91", type=str, help="client_secret")
+    parser.add_argument("--base_df", default="song_artist_v2/song_artist_part2.csv", type=str, help="csv name") # ./data/song_artist_part_2.csv
+    parser.add_argument("--end_df", default="searched_df_v2/searched_df_part2_1.csv", type=str, help="csv name") # ./data/searched_df_part_2.csv
     args = parser.parse_args()
     return args
 
@@ -116,16 +116,16 @@ def create_df(headers, base_df):
 
     for track_name, artist_name, track_id, preview_url \
     in zip(tqdm(base_df.song_name), base_df.artist_name_basket, base_df.searched_track_id, base_df.searched_preview_url):
-        if track_id != "no result":
-            searched_df.loc[len(searched_df)] = pd.Series(
-            {
-                "searched_track_name": track_name, 
-                "searched_track_artist": artist_name, 
-                "searched_track_id": track_id, 
-                "searched_preview_url": preview_url,
-                }
-            )
-            continue
+        # if track_id != None:
+        #     searched_df.loc[len(searched_df)] = pd.Series(
+        #     {
+        #         "searched_track_name": track_name, 
+        #         "searched_track_artist": artist_name, 
+        #         "searched_track_id": track_id, 
+        #         "searched_preview_url": preview_url,
+        #         }
+        #     )
+        #     continue
         response = search_with_query(headers, track_name, artist_name)
         
         if response.status_code == 400:
