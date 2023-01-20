@@ -59,6 +59,9 @@ const HandleUrl = () => {
     .then((playlist_id) => {
       setNewPlayListId(playlist_id)
     });
+
+
+    await response.json().then((data)=>setResults(data))
   }
 
 

@@ -72,7 +72,6 @@ async def receive_items(request: Request):
     return {"items": items}
 
 
-# @app.post("/recplaylist", description="추천을 요청합니다.", response_model=InferenceTrack)
 @app.post("/recplaylist/", description="추천을 요청합니다.")
 async def make_inference_track(request: Request):
     global headers
@@ -90,10 +89,12 @@ async def make_inference_track(request: Request):
     
     inference_result = get_model_rec(model=model, input_ids=tmp, top_k=10)
     inference_result = np.array(inference_result).tolist()
-    # inference_track = InferenceTrack(result = inference_result)
+
+
     playlist_id = createCustomPlayList(headers, inference_result)
     
     return playlist_id
+
 
 
 # 노래를 클릭으로 받아올 경우 (모델에 들어갈 인풋)
@@ -117,6 +118,18 @@ async def songList(song: str):
     res = cursor.fetchall()
 
     return res
+
+
+def id2track_name(track_ids: List[int]):
+    track_name_list = []
+    for track_id in track_ids:
+        sql = f"SELECT * FROM song_meta WHERE id={track_id}"
+        cursor.execute(sql)
+        res = cursor.fetchall()
+        track_name_list.append(res[0][5])
+    return track_name_list
+
+
 
 
 if __name__=="__main__":
