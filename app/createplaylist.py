@@ -1,12 +1,5 @@
-import os
 import requests
-from urllib.parse import urlencode
-import base64
 import json
-import undetected_chromedriver as uc
-from selenium.webdriver.common.by import By
-from selenium import webdriver
-import subprocess, re
 
 # 플레이 리스트를 생성하고 안에 노래는 하나씩 추가해주는 방식
 def createCustomPlayList(headers, new_playlist:list=[]):

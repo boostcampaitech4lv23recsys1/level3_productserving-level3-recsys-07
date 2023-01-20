@@ -1,8 +1,6 @@
-import os
 import requests
 from urllib.parse import urlencode
 import base64
-import json
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium import webdriver
