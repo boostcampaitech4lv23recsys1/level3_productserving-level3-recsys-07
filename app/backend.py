@@ -14,12 +14,16 @@ from datetime import datetime
 from utils import set_local_database, set_cloud_database, set_trackname2id, set_id2trackname, set_id2url
 
 
-# Initial Setting
+
+
+#== Initial Setting
 
 #==== Set database from gpu server local csv on RAM for fast model run
 song_meta_data, track_name2id, id2track_name, id2url = set_local_database()
+
 #==== Set database from cloud db for search
 cursor = set_cloud_database()
+
 #==== Creaat app and CORS setting
 app = FastAPI()
 app.add_middleware(
@@ -29,6 +33,7 @@ app.add_middleware(
     allow_methods=["*"],    
     allow_headers=["*"],
     )
+
 #==== Classes for logging
 class Track(BaseModel):
     id: UUID = Field(default_factory=uuid4)
