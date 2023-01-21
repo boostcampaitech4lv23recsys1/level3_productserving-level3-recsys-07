@@ -50,7 +50,7 @@ const HandleUrl = () => {
         setSrc(["https://open.spotify.com/embed/playlist/" + playlistID + "?utm_source=generator"]);
       });
     
-    const response = await fetch(`http://localhost:8000/recplaylist/`, {
+    const response = await fetch(`http://localhost:30001/recplaylist/`, {
       method: 'POST',
       body: JSON.stringify(playlistArray),
       headers: { 'Content-Type': 'application/json' },
