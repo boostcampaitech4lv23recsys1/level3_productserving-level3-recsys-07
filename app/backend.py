@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field
 from typing import List, Union, Optional, Dict, Any
 from uuid import UUID, uuid4
 from datetime import datetime
-from utils import set_local_database, set_cloud_database, set_trackname2id, set_id2trackname, set_id2url
+from utils import set_local_database, set_cloud_database, set_prename2id, set_id2something
 
 
 
@@ -19,7 +19,7 @@ from utils import set_local_database, set_cloud_database, set_trackname2id, set_
 #== Initial Setting
 
 #==== Set database from gpu server local csv on RAM for fast model run
-song_meta_data, track_name2id, id2track_name, id2url = set_local_database()
+song_meta_data, prename2id, id2track_name, id2url, id2artist, id2trackid = set_local_database()
 
 #==== Set database from cloud db for search
 cursor = set_cloud_database()
@@ -67,16 +67,15 @@ async def make_inference_track(request: Request):
     except JSONDecodeError as e:
         raise HTTPException(status_code=400, detail=str(e))
     
-    input_ids = set_trackname2id(input_track_names, track_name2id)
+    input_ids = set_prename2id(input_track_names, prename2id)
     print(input_ids)
     
     model = EASE()
     result_ids = get_model_rec(model=model, input_ids=input_ids, top_k=10)
     
-    result_names = set_id2trackname(result_ids, id2track_name)
-    result_track_urls = set_id2url(result_ids, id2url)
-    print({'result_names': result_names, 'result_track_urls': result_track_urls })
-    return {'result_names': result_names, 'result_track_urls': result_track_urls }
+    result = set_id2something(result_ids, id2track_name, id2artist, id2trackid, id2url)
+    print(result)
+    return result
 
 
 

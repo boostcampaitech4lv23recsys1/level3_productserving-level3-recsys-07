@@ -134,13 +134,21 @@ def set_local_database():
     
     song_meta_data = pd.read_csv("/opt/ml/final/data/song_meta.csv", sep=';', engine="pyarrow")
     
-    track_name2id, id2track_name, id2url = {}, {}, {}
-    for track_name, url, id in zip(song_meta_data.song_name, song_meta_data.preview_url, song_meta_data.id):
-        pre_name = re.sub("[^\w]", '', track_name).strip().lower()
-        track_name2id[pre_name] = id
-        id2track_name[id] = pre_name
+    prename2id, id2track_name, id2url, id2artist, id2trackid = {}, {}, {}, {}, {}
+    for track_name, url, id, artist, track_id in zip(song_meta_data.song_name, 
+                                           song_meta_data.preview_url, 
+                                           song_meta_data.id,
+                                           song_meta_data.searched_artist_name,
+                                           song_meta_data.song_id):
+        
+        prename = re.sub("[^\w]", '', track_name).strip().lower()
+        prename2id[prename] = id
+        id2track_name[id] = track_name 
         id2url[id] = url
-    return song_meta_data, track_name2id, id2track_name, id2url
+        id2artist[id] = artist
+        id2trackid[id] = track_id
+        
+    return song_meta_data, prename2id, id2track_name, id2url, id2artist, id2trackid
 
 
 def set_cloud_database():
@@ -161,33 +169,32 @@ def set_cloud_database():
     return cursor
 
 
-def set_trackname2id(input_names: List[str], track_name2id: Dict):
+def set_prename2id(input_names: List[str], prename2id: Dict):
     
     track_id_list = []
     for track_name in input_names:
         pre_track_name = re.sub("[^\w]", '', track_name).strip().lower()
-        track_id_list.append(track_name2id[pre_track_name])
+        track_id_list.append(prename2id[pre_track_name])
         
     return track_id_list
 
 
-def set_id2trackname(input_ids: List[str], id2track_name: Dict):
+def set_id2something(input_ids: List[int], 
+                     id2track_name: Dict, 
+                     id2artist: Dict, 
+                     id2trackid: Dict,
+                     id2url: Dict,
+                     ):
     
-    track_name_list = []
+    track_info_lists = []
     for id in input_ids:
-        track_name_list.append(id2track_name[id])
+        track_info_lists.append((id2track_name[id], 
+                                 id2artist[id], 
+                                 id2trackid[id],
+                                 id2url[id]))
+        
+    return track_info_lists
 
-    return track_name_list
-
-
-
-def set_id2url(input_ids: List[str], id2url: Dict):
-    
-    track_url_list = []
-    for id in input_ids:
-        track_url_list.append(id2url[id])
-
-    return track_url_list
 
 
 
