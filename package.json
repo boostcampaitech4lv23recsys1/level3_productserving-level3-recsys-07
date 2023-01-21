@@ -11,7 +11,6 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",
     "react-dom": "^18.2.0",
-    "react-gsap": "^3.2.1",
     "react-router-dom": "^6.6.1",
     "react-scripts": "5.0.1",
     "spotify-api.js": "^9.2.5",
@@ -21,7 +20,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "aws s3 sync ./build s3://musicrec2 --profile=kimboseong"
   },
   "eslintConfig": {
     "extends": [
