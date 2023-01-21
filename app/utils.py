@@ -1,10 +1,15 @@
 import requests
-from urllib.parse import urlencode
 import base64
-import undetected_chromedriver as uc
+import pandas as pd
+import pymysql
+# import undetected_chromedriver as uc
+import subprocess, re
+import json
 from selenium.webdriver.common.by import By
 from selenium import webdriver
-import subprocess, re
+from urllib.parse import urlencode
+from typing import List, Union, Optional, Dict, Any
+
 
 def get_user_access_token_with_scope():    
     # 현재 내 크롬 버전 찾아서 드라이버 설치
@@ -90,3 +95,99 @@ def get_user_access_token_with_scope():
 
 
     return headers
+
+
+# 플레이 리스트를 생성하고 안에 노래는 하나씩 추가해주는 방식
+def createCustomPlayList(headers, new_playlist:list=[]):
+    print("headers : ", headers)
+    spotify_user_id = "31rzm4yi3fqvvfe236mr2ylmmhje" 
+    CREATEPLAYLIST_URL  = f"https://api.spotify.com/v1/users/{spotify_user_id}/playlists"
+    
+    body = {
+        "name": "New Playlist in vscode final",
+        "description": "New playlist Our Ease model recommendation",
+        "public": True
+    }
+    body = json.dumps(body)
+    
+    try:
+        response = requests.post(CREATEPLAYLIST_URL, headers=headers, data=body)
+    except:
+        raise ValueError("CREATE PLAYLIST ERROR")
+
+    # playlist id 저장
+    playlist_id = response.json()['id']
+
+    ADDTRACK_URL = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
+    uris = ["spotify:track:"+str(track_uri)+"," for track_uri in new_playlist]
+    uris = "".join(uris)
+
+    try:
+        response = requests.post(f"{ADDTRACK_URL}?uris={uris}", headers=headers)
+    except:
+        raise ValueError("ADD TRACK ERROR")
+    
+    return playlist_id
+    
+    
+def set_local_database():
+    
+    song_meta_data = pd.read_csv("/opt/ml/final/data/song_meta.csv", sep=';', engine="pyarrow")
+    
+    track_name2id, id2track_name, id2url = {}, {}, {}
+    for track_name, url, id in zip(song_meta_data.song_name, song_meta_data.preview_url, song_meta_data.id):
+        pre_name = re.sub("[^\w]", '', track_name).strip().lower()
+        track_name2id[pre_name] = id
+        id2track_name[id] = pre_name
+        id2url[id] = url
+    return song_meta_data, track_name2id, id2track_name, id2url
+
+
+def set_cloud_database():
+    
+    # database connection
+    conn = pymysql.connect(
+        host='database-2.csf4gv44uzg9.ap-northeast-2.rds.amazonaws.com',
+        port=3306,
+        charset='utf8',
+        user='admin',
+        passwd='wjdtmddus1!',
+        db='test_final'
+    )
+    
+    # database cursor
+    cursor = conn.cursor()
+    
+    return cursor
+
+
+def set_trackname2id(input_names: List[str], track_name2id: Dict):
+    
+    track_id_list = []
+    for track_name in input_names:
+        pre_track_name = re.sub("[^\w]", '', track_name).strip().lower()
+        track_id_list.append(track_name2id[pre_track_name])
+        
+    return track_id_list
+
+
+def set_id2trackname(input_ids: List[str], id2track_name: Dict):
+    
+    track_name_list = []
+    for id in input_ids:
+        track_name_list.append(id2track_name[id])
+
+    return track_name_list
+
+
+
+def set_id2url(input_ids: List[str], id2url: Dict):
+    
+    track_url_list = []
+    for id in input_ids:
+        track_url_list.append(id2url[id])
+
+    return track_url_list
+
+
+

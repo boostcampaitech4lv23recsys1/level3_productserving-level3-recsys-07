@@ -1,3 +1,8 @@
+import uvicorn
+import numpy as np
+import pandas as pd
+import re
+
 from fastapi import FastAPI, HTTPException, Request
 from json import JSONDecodeError
 from fastapi.middleware.cors import CORSMiddleware
@@ -6,60 +11,37 @@ from pydantic import BaseModel, Field
 from typing import List, Union, Optional, Dict, Any
 from uuid import UUID, uuid4
 from datetime import datetime
+from utils import set_local_database, set_cloud_database, set_trackname2id, set_id2trackname, set_id2url
 
-import uvicorn
-import pymysql
-import numpy as np
 
-from createplaylist import createCustomPlayList
-from getaccesstoken import get_user_access_token_with_scope
+# Initial Setting
 
-import os
-import requests
-from urllib.parse import urlencode
-import base64
-import json
-import undetected_chromedriver as uc
-from selenium.webdriver.common.by import By
-from selenium import webdriver
-import subprocess, re
-
-# database connection
-conn = pymysql.connect(
-    host='database-2.csf4gv44uzg9.ap-northeast-2.rds.amazonaws.com',
-    port=3306,
-    charset='utf8',
-    user='admin',
-    passwd='wjdtmddus1!',
-    db='test_final'
-)
-
-# database cursor
-cursor = conn.cursor()
-
+#==== Set database from gpu server local csv on RAM for fast model run
+song_meta_data, track_name2id, id2track_name, id2url = set_local_database()
+#==== Set database from cloud db for search
+cursor = set_cloud_database()
+#==== Creaat app and CORS setting
 app = FastAPI()
-
-origins =['*']
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=['*'],
     allow_credentials=True,
     allow_methods=["*"],    
     allow_headers=["*"],
     )
-
-headers = get_user_access_token_with_scope()
-
+#==== Classes for logging
 class Track(BaseModel):
     id: UUID = Field(default_factory=uuid4)
     name: str
+ 
     
 class InferenceTrack(Track):
     id: UUID = Field(default_factory=uuid4)
     name: str = "inference_track_id"
     result: Optional[List]
 
+
+#== Baceknd Codes
 
 @app.post("/items")
 async def receive_items(request: Request):
@@ -76,24 +58,20 @@ async def receive_items(request: Request):
 async def make_inference_track(request: Request):
     global headers
     try:
-        input_tracks = await request.json()
+        input_track_names = await request.json()
     except JSONDecodeError as e:
         raise HTTPException(status_code=400, detail=str(e))
     
+    input_ids = set_trackname2id(input_track_names, track_name2id)
+    print(input_ids)
+    
     model = EASE()
-    # tmp = [525514, 562083, 297861]
-    # print("playlistArray : ", playlistArray)
-    tmp = ["0KfswiAPot70lal7a3QKrh", "48kRs4L0S1XayLPznidhFF", "0ruPTZe2MuRofCvOnNZIip"]
+    result_ids = get_model_rec(model=model, input_ids=input_ids, top_k=10)
     
-    print('inferece start')
-    
-    inference_result = get_model_rec(model=model, input_ids=tmp, top_k=10)
-    inference_result = np.array(inference_result).tolist()
-
-
-    playlist_id = createCustomPlayList(headers, inference_result)
-    
-    return playlist_id
+    result_names = set_id2trackname(result_ids, id2track_name)
+    result_track_urls = set_id2url(result_ids, id2url)
+    print({'result_names': result_names, 'result_track_urls': result_track_urls })
+    return {'result_names': result_names, 'result_track_urls': result_track_urls }
 
 
 
@@ -120,17 +98,5 @@ async def songList(song: str):
     return res
 
 
-def id2track_name(track_ids: List[int]):
-    track_name_list = []
-    for track_id in track_ids:
-        sql = f"SELECT * FROM song_meta WHERE id={track_id}"
-        cursor.execute(sql)
-        res = cursor.fetchall()
-        track_name_list.append(res[0][5])
-    return track_name_list
-
-
-
-
 if __name__=="__main__":
-    uvicorn.run("backend:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("backend:app", host="0.0.0.0", port=30001, reload=True)
