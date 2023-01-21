@@ -445,10 +445,12 @@ $(".output_playlist .submit_button").click(function(){
 
 	// Hide
 	$('.output_playlist').hide();
+	$('#handleurl_container').hide();
+	$('.test-player-container').css('display', 'flex');
 
-	// Show
-	urlStartToGetRecPlayList.fromTo($('.recommand_result_playlist'), 0.8, {opacity: 0, x: 30},
-		{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 0.5);	
+	// // Show
+	// urlStartToGetRecPlayList.fromTo($('.recommand_result_playlist'), 0.8, {opacity: 0, x: 30},
+	// 	{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 0.5);	
 })
 
 

@@ -9,7 +9,7 @@ const HandleUrl = () => {
   const playlistArray = [];
 
   const [token, setToken] = useState('');  
-  const [playlistUrl, setPlaylistUrl] = useState('https://open.spotify.com/playlist/6i37SY1yWdDhzVHBUFX4Rq');
+  const [playlistUrl, setPlaylistUrl] = useState('https://open.spotify.com/playlist/6yS3dqEDGALDpEukkgRlds');
   const [src, setSrc] = useState('');
   const [results, setResults] = useState([]);
 
@@ -37,7 +37,6 @@ const HandleUrl = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     await fetch(APIBASE + playlistID + '/tracks', {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -47,7 +46,7 @@ const HandleUrl = () => {
       .then((data) => {
         data.items.map((trackObj) => playlistArray.push(trackObj.track.name));
         console.log(`playlistArray: ${playlistArray}`);
-        setSrc(["https://open.spotify.com/embed/playlist/" + playlistID + "?utm_source=generator"]);
+        setSrc(["https://open.spotify.com/embed/playlist/" + playlistID]);
       });
     
     const response = await fetch(`http://localhost:30001/recplaylist/`, {
@@ -56,25 +55,25 @@ const HandleUrl = () => {
       headers: { 'Content-Type': 'application/json' },
     })
     .then((response) => response.json())
-    .then((playlist_id) => {
-      setNewPlayListId(playlist_id)
+    .then((data) => {
+      console.log(data)
     });
 
 
-    await response.json().then((data)=>setResults(data))
+    // await response.json().then((data)=>setResults(data))
   }
 
 
-  useEffect(() => {
-    axios(APIBASE + newPlayListId + '/tracks', {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    })
-      .then((data) => {
-        setNewPlayListSrc(["https://open.spotify.com/embed/playlist/" + newPlayListId + "?utm_source=generator"]);
-      });
-  },[newPlayListId])
+  // useEffect(() => {
+  //   axios(APIBASE + newPlayListId + '/tracks', {
+  //     headers: {
+  //       'Authorization': `Bearer ${token}`,
+  //     },
+  //   })
+  //     .then((data) => {
+  //       setNewPlayListSrc(["https://open.spotify.com/embed/playlist/" + newPlayListId + "?utm_source=generator"]);
+  //     });
+  // },[newPlayListId])
 
 
 
@@ -89,6 +88,7 @@ const HandleUrl = () => {
           <button type='submit' className="submit_button"> START </button>
         </form>
       </div>
+
       <div className="output_playlist">
           <div className="playlist_cls">
             <div className='playlist_content_div'>
@@ -99,7 +99,6 @@ const HandleUrl = () => {
               <button type='submit' className="submit_button"> GET RECOMMAND </button>
             </div>
           </div>
-          
       </div>
 
       <div className='recommand_result_playlist'>
