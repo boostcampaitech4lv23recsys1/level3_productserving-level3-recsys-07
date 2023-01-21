@@ -11,63 +11,23 @@ class EASE:
         self._lambda = _lambda
 
     def train(self, X):
-        X = X.toarray()
-        G = X.T @ X # G = X'X
+        X = torch.tensor(X.toarray()).to('cuda')
+        G = torch.mm(X.T, X) # G = X'X
         diag_indices = np.diag_indices(G.shape[0])
         G[diag_indices] += self._lambda   # X'X + λI
-        P = np.linalg.inv(G)    # P = (X'X + λI)^(-1)
-        self.B = P / -np.diag(P)    # - P_{ij} / P_{jj} if i ≠ j
+        P = torch.linalg.inv(G)    # P = (X'X + λI)^(-1)
+        self.B = P / -torch.diag(P)    # - P_{ij} / P_{jj} if i ≠ j
         self.B[diag_indices] = 0  # 대각행렬 원소만 0으로 만들어주기 위해
 
     def forward(self, user_row):
-        return user_row @ self.B
+        return user_row @ self.B.to('cpu').numpy()
 
 
 def get_model_rec(model, input_ids, top_k) -> EASE:
     import pymysql
     """Model을 가져옵니다"""
-    # train = pd.read_csv("../data/train/kakao_song_data2.csv")[:100]
-
-    # database connection
-    conn = pymysql.connect(
-        host='database-2.csf4gv44uzg9.ap-northeast-2.rds.amazonaws.com',
-        port=3306,
-        charset='utf8',
-        user='admin',
-        passwd='wjdtmddus1!',
-        db='test_final'
-    )
-
-    # database cursor
-    cursor = conn.cursor()
-    sql = """SELECT searched_track_id
-            FROM test 
-            WHERE searched_track_name REGEXP '[가-힇]'  and not searched_track_id = 'not matched' and not searched_track_id = 'code 400'
-            LIMIT 200;"""
-    cursor.execute(sql)
-
-    res = cursor.fetchall()
-    df = pd.DataFrame(res, columns=['item'])
-
-    import random
-    user = []
-    item = []
-    for j in range(100):
-        user.append(j)
-        item.append(list(df.sample(random.randint(5,20))['item'].values))
-        # user[j] = 
-
-    df_dict = {
-        "user" : user,
-        "item" : item
-    }
-
-    res_df = pd.DataFrame(df_dict)
-    train = res_df.explode('item')
-
-
-    # train = pd.DataFrame(res, columns=['user','item'])
-
+    train = pd.read_csv("/opt/ml/final/data/train.csv")
+    
     users = train['user'].unique()
     items = train['item'].unique()
 
