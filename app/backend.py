@@ -36,14 +36,15 @@ app.add_middleware(
 
 #==== Classes for logging
 class Track(BaseModel):
-    id: UUID = Field(default_factory=uuid4)
     name: str
+    artist: str
+    track_id: str
+    source: str
  
     
-class InferenceTrack(Track):
+class Playlist(BaseModel):
     id: UUID = Field(default_factory=uuid4)
-    name: str = "inference_track_id"
-    result: Optional[List]
+    playlist: List[Track] = Field(default_factory=list)
 
 
 #== Baceknd Codes
@@ -59,7 +60,7 @@ async def receive_items(request: Request):
     return {"items": items}
 
 
-@app.post("/recplaylist/", description="추천을 요청합니다.")
+@app.post("/recplaylist", description="추천을 요청합니다.")
 async def make_inference_track(request: Request):
     global headers
     try:
@@ -73,9 +74,14 @@ async def make_inference_track(request: Request):
     model = EASE()
     result_ids = get_model_rec(model=model, input_ids=input_ids, top_k=10)
     
-    result = set_id2something(result_ids, id2track_name, id2artist, id2trackid, id2url)
-    print(result)
-    return result
+    track_info_lists = set_id2something(result_ids, id2track_name, id2artist, id2trackid, id2url)
+    
+    tracks = []
+    [tracks.append(Track(name=track_name, artist=track_artist, track_id=trackid, source=url)) for track_name, track_artist, trackid, url in track_info_lists]
+    
+    new_playlist = Playlist(playlist = tracks)
+    print(new_playlist)
+    return new_playlist
 
 
 
