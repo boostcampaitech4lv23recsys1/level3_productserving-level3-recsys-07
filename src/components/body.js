@@ -2,10 +2,8 @@ import React from "react";
 import Header from "./header";
 import Navigation from "./nav";
 import MiniPlayer from "./miniPlayer";
-import TestPlayer from "./testPlayer";
 import Player from "./player";
 import Background from "./background"
-
 import Home from "./home";
 import Curator from "./curator";
 // import Search from "./search";
@@ -40,7 +38,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
           <Header />
           <Navigation />
           <MiniPlayer />
-          <TestPlayer/>
           <div className='dim'></div>
           <Player />
           <Background />
