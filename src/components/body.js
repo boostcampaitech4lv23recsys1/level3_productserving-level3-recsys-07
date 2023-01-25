@@ -10,17 +10,14 @@ import Curator from "./curator";
 // import Search from "./search";
 import Input from "./start_input/input"
 import HandleUrl from "./start_input/handleUrl"
-import Select from "./start_input/select"
+// import Select from "./start_input/select"
 import Search from "./start_input/search";
 
 import CuratorPlayList from "./curatorPlayList";
 import axios from "axios";
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; 
-
-  const Body = (e) => {
+const Body = (e) => {
   return (
-    <Router>
       <div>
         <header>
           <div>
@@ -50,7 +47,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
           <Input />
           <HandleUrl />
           <Search />
-          <Select />
+          {/* <Select /> */}
       
           {/* 큐레이터 전환 */}
           <Curator />
@@ -59,7 +56,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
          </div>
        </div>
-     </Router>
   );
 };
 

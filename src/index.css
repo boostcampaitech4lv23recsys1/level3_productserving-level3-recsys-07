@@ -893,13 +893,6 @@ img.track {
   display: none;
 }
 
-#search_container .search_content{
-  position: absolute;
-  top: 25%;
-  width: 100%;
-  height: 50vh;
-  display: inline;
-}
 
 #search_container .search_content .search_input{
   position: relative;
@@ -919,14 +912,71 @@ img.track {
 #search_container .list-group{
   text-align: center;
   align-items: center;
+  max-height: 300px;
+  overflow:scroll;
+  -webkit-overflow-scrolling: touch;  
 }
 
+#search_container .list-group::-webkit-scrollbar {
+  width: 0.0;
+  height: 0.0;
+  background-color: #F5F5F5;
+}
+ 
 
 #search_container .list-group-item{
   width: 50%;
   text-align: center;
   align-items: center;
 }
+
+#search_container .search_content{
+  position: absolute;
+  top: 25%;
+  width: 100%;
+  height: 50vh;
+  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Divide the super-div into 2 equal columns */
+}
+
+.search_content_input{
+  display: inline-block;
+}
+
+.search_content_output{
+  display:inline-block;
+}
+
+.search_content_output .s1{
+  display: block;
+  width: 500px;
+  text-align: center;
+}
+
+.search_content_output .search_result_save{
+  background-color: #FBFFFB;
+  align-items: center;
+  border-radius: 5%;
+  width: 500px;
+  height: 300px;
+  overflow:scroll;
+  -webkit-overflow-scrolling: touch;  
+  display: block;
+}
+
+.search_content_output .search_result_save::-webkit-scrollbar {
+  width: 0.0;
+  height: 0.0;
+  background-color: #F5F5F5;
+}
+
+.search_content_output .submit_btn_div{
+  width: 500px;
+  display: block;
+  align-items: center;
+}
+
 
 
 
@@ -1140,3 +1190,6 @@ img.track {
   align-items: center;
   justify-content: center;
 }
+
+
+

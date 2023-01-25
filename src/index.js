@@ -348,7 +348,7 @@ $("#home_page").click(function(){
 });
 
 // ===== Search page  =====
-$('#search_music_page').click(function(){
+$('#playlist_select').click(function(){
 	$('#handleurl_container').hide();
 	$('#start_input_container').hide();
 	$("#search_container").hide();
@@ -453,10 +453,10 @@ $(".output_playlist .submit_button").click(function(){
 
 
 
-$("#playlist_select").click(function(){
-	$('#start_input_container').hide();
-	$('#select_container').css('display', 'flex');
-});
+// $("#playlist_select").click(function(){
+// 	$('#start_input_container').hide();
+// 	$('#select_container').css('display', 'flex');
+// });
 
 
 // select에서 playlist를 가져오기 위한 버튼 클릭
