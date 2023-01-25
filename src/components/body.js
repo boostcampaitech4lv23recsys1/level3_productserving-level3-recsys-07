@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "./header";
 import Navigation from "./nav";
 import MiniPlayer from "./miniPlayer";
@@ -16,6 +16,12 @@ import CuratorPlayList from "./curatorPlayList";
 import axios from "axios";
 
 const Body = (e) => {
+  const [selectedCurator, setSelectedCurator] = useState("")
+
+  const handleCuratorClick = (val) => {
+    setSelectedCurator(val);
+  }
+
   return (
       <div>
         <header>
@@ -49,8 +55,8 @@ const Body = (e) => {
           {/* <Select /> */}
       
           {/* 큐레이터 전환 */}
-          <Curator />
-          <CuratorPlayList />
+          <Curator onClick={handleCuratorClick}/>
+          <CuratorPlayList selectedCurator={selectedCurator}/>
 
 
          </div>
