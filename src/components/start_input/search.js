@@ -55,14 +55,14 @@ const Search = () => {
       }
 
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     await fetch(`http://localhost:30001/recplaylist/`, {
-    //         method: 'POST',
-    //         body: JSON.stringify(itemList['track']),
-    //         headers: { 'Content-Type': 'application/json' }
-    //       })
-    // }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await fetch(`http://localhost:30001/recplaylist/`, {
+            method: 'POST',
+            body: JSON.stringify(itemList['track']),
+            headers: { 'Content-Type': 'application/json' }
+          })
+    }
 
     
 
@@ -103,11 +103,11 @@ const Search = () => {
                             </li>
                         ))}
                     </div>
-                    {/* <form onSubmit={handleSubmit}> */}
+                    <form onSubmit={handleSubmit}>
                         <div className="submit_btn_div">
                             <button type='submit' className="submit_button">Get Recommend</button>
                         </div>
-                    {/* </form> */}
+                    </form>
                     
                 </div>
             </div>
