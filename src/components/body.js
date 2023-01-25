@@ -4,7 +4,6 @@ import Navigation from "./nav";
 import MiniPlayer from "./miniPlayer";
 import Player from "./player";
 import Background from "./background"
-
 import Home from "./home";
 import Curator from "./curator";
 // import Search from "./search";
