@@ -1,6 +1,17 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 
-const Curator = (e) => {
+const Curator = (props) => {
+  const [selectedCurator, setSelectedCurator] = useState('');
+
+  const handleClick = (val) => {
+    setSelectedCurator(val);
+  }
+
+  useEffect(() => {
+    props.onClick(selectedCurator);
+    console.log("selectedCurator : ", selectedCurator)
+  },[selectedCurator])
+
   return (
     <div className="page" id="curator">
       <div className="curator_title_wrapper">
@@ -24,46 +35,39 @@ const Curator = (e) => {
             Or Select <br />a Listener of <br />
             L.P.
           </div>
-          <div className="item">
+          <div className="item" onClick={() => handleClick('Hyunwook Ko')}>
             <div className="thumb"></div>
             <div className="info">
-              <div className="name">Seung yeon</div>
+              <div className="name" >Hyeon Wook</div>
               <div className="desc">PlayList</div>
             </div>
           </div>
-          <div className="item">
+          <div className="item" onClick={() => handleClick('Bo Seong')}>
             <div className="thumb"></div>
             <div className="info">
-              <div className="name">Fantasy</div>
-              <div className="desc">Sam</div>
+              <div className="name" onClick={handleClick}>Bo Seong</div>
+              <div className="desc">PlayList</div>
             </div>
           </div>
-          <div className="item">
+          <div className="item" onClick={() => handleClick('Moon sun Park')}>
             <div className="thumb"></div>
             <div className="info">
-              <div className="name">Fantasy</div>
-              <div className="desc">Sam</div>
+              <div className="name" onClick={handleClick}>Moon Soon</div>
+              <div className="desc">PlayList</div>
             </div>
           </div>
-          <div className="item">
+          <div className="item" onClick={() => handleClick('Jung Ho')}>
             <div className="thumb"></div>
             <div className="info">
-              <div className="name">Fantasy</div>
-              <div className="desc">Sam</div>
+              <div className="name" onClick={handleClick}>Jeong Ho</div>
+              <div className="desc">PlayList</div>
             </div>
           </div>
-          <div className="item">
+          <div className="item" onClick={() => handleClick('Seung Yeon')}>
             <div className="thumb"></div>
             <div className="info">
-              <div className="name">Fantasy</div>
-              <div className="desc">Sam</div>
-            </div>
-          </div>
-          <div className="item">
-            <div className="thumb"></div>
-            <div className="info">
-              <div className="name">Fantasy</div>
-              <div className="desc">Sam</div>
+              <div className="name" onClick={handleClick}>Seung Yeon</div>
+              <div className="desc">PlayList</div>
             </div>
           </div>
         </div>
