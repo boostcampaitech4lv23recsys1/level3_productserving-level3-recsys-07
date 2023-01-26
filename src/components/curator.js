@@ -35,7 +35,7 @@ const Curator = (props) => {
             Or Select <br />a Listener of <br />
             L.P.
           </div>
-          <div className="item" onClick={() => handleClick('Hyeon Wook')}>
+          <div className="item" onClick={() => handleClick('Hyunwook Ko')}>
             <div className="thumb"></div>
             <div className="info">
               <div className="name" >Hyeon Wook</div>
@@ -49,14 +49,14 @@ const Curator = (props) => {
               <div className="desc">PlayList</div>
             </div>
           </div>
-          <div className="item" onClick={() => handleClick('Moon Soon')}>
+          <div className="item" onClick={() => handleClick('Moon sun Park')}>
             <div className="thumb"></div>
             <div className="info">
               <div className="name" onClick={handleClick}>Moon Soon</div>
               <div className="desc">PlayList</div>
             </div>
           </div>
-          <div className="item" onClick={() => handleClick('Jeong Ho')}>
+          <div className="item" onClick={() => handleClick('Jung Ho')}>
             <div className="thumb"></div>
             <div className="info">
               <div className="name" onClick={handleClick}>Jeong Ho</div>

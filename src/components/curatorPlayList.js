@@ -4,17 +4,15 @@ import React from "react"
 const CuratorPlayList = ({selectedCurator}) =>{
     const style = "border-radius:12px";
     var src = ""
-    if (selectedCurator === 'Hyeon Wook') {
+    if (selectedCurator === 'Hyunwook Ko') {
         src = 'https://open.spotify.com/embed/playlist/46VjhWQI5BrkE1FEh4Wx51?utm_source=generator';
       } else if (selectedCurator === 'Bo Seong') {
-        src = 'https://open.spotify.com/embed/playlist/46VjhWQI5BrkE1FEh4Wx51?utm_source=generator'; // 아직
-      } else if (selectedCurator === "Jeong Ho"){
+        src = 'https://open.spotify.com/embed/playlist/6i37SY1yWdDhzVHBUFX4Rq?utm_source=generator'; // 아직
+      } else if (selectedCurator === "Jung Ho"){
         src = "https://open.spotify.com/embed/playlist/0C0neYjfv39BDREAuGGh7G?utm_source=generator";
-      }
-      else if (selectedCurator === "Moon Soon"){
-        src = "https://open.spotify.com/embed/playlist/0C0neYjfv39BDREAuGGh7G?utm_source=generator"; // 아직
-      }
-      else if (selectedCurator === "Seung Yeon"){
+      } else if (selectedCurator === "Moon sun Park"){
+        src = "https://open.spotify.com/embed/playlist/5lXlNQwooyOpm9Xcal1zkQ?utm_source=generator"; // 아직
+      } else if (selectedCurator === "Seung Yeon"){
         src = "https://open.spotify.com/embed/playlist/45iVWyXlQJp87zrwlX1j2M?utm_source=generator";
       }
 
