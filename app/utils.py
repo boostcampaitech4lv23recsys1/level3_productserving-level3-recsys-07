@@ -132,7 +132,7 @@ from typing import List, Union, Optional, Dict, Any
     
 def set_local_database():
     
-    song_meta_data = pd.read_csv("/opt/ml/final/data/song_meta.csv", sep=';', engine="pyarrow")
+    song_meta_data = pd.read_csv("../data/song_meta.csv", sep=';', engine="pyarrow")
     
     prename2id, id2track_name, id2url, id2artist, id2trackid = {}, {}, {}, {}, {}
     for track_name, url, id, artist, track_id in zip(song_meta_data.song_name, 

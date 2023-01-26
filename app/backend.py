@@ -63,11 +63,13 @@ async def receive_items(request: Request):
 @app.post("/recplaylist", description="추천을 요청합니다.")
 async def make_inference_track(request: Request):
     global headers
+    print("request : ", request)
     try:
         input_track_names = await request.json()
     except JSONDecodeError as e:
         raise HTTPException(status_code=400, detail=str(e))
     
+    print("input_track_names : ", input_track_names)
     input_ids = set_prename2id(input_track_names, prename2id)
     print(input_ids)
     
@@ -96,11 +98,11 @@ async def songList(trackList:list):
 @app.post("/searchSong/{song}")
 async def songList(song: str):
     sql = f"""
-            SELECT JSON_OBJECT('track_name', searched_track_name, 'track_id', searched_track_id)
-            FROM test 
-            WHERE searched_track_name 
-            LIKE '%{song}%' 
-            LIMIT 10
+            SELECT DISTINCT JSON_OBJECT('track_name', searched_song_name, 'track_id', song_id, 'artist_name', searched_artist_name)
+            FROM song_meta 
+            WHERE searched_song_name 
+            LIKE '{song}%'
+            LIMIT 20;
             """
     cursor.execute(sql)
     res = cursor.fetchall()
