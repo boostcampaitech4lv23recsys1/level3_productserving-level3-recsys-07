@@ -14,6 +14,7 @@ import Search from "./start_input/search";
 
 import CuratorPlayList from "./curatorPlayList";
 import axios from "axios";
+import GoogleButton from "./googlebutton";
 
 const Body = (e) => {
   const [selectedCurator, setSelectedCurator] = useState("")
@@ -32,6 +33,8 @@ const Body = (e) => {
               rel="stylesheet"
               href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
             />
+            <div className="application">
+        </div>
             {/* <link rel="stylesheet" href="./style.css" /> */}
           </div>
         </header>
@@ -47,6 +50,7 @@ const Body = (e) => {
 
           {/* 홈페이지 */}
           <Home />
+          <GoogleButton />
 
           {/* Start Input 페이지 */}
           <Input />
