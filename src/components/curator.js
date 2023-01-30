@@ -9,7 +9,6 @@ const Curator = (props) => {
 
   useEffect(() => {
     props.onClick(selectedCurator);
-    console.log("selectedCurator : ", selectedCurator)
   },[selectedCurator])
 
   return (

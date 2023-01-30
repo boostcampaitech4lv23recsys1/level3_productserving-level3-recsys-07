@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
+import OutputPlayer from "../players/outputPlayer";
 
 const Search = () => {
     const [searchInput, setSearchInpput] = useState("");
     const [showTrackList, setShowTrackList] = useState([]);
     const [itemList, setItemList] = useState({track:[], artist:[]})
+    const [results, setResults] = useState([]);
+    const [buttonBool, setButtonBool] = useState(false);
 
     useEffect(() => {
         setShowTrackList([]);
-
         if (searchInput != []){
-            axios("http://localhost:8000/searchSong/"+searchInput, {
+            axios("http://27.96.130.130:30001/searchSong/"+searchInput, {
                 headers: { 
                     "Content-Type": "application/json",
                     withCredentials:true 
@@ -28,9 +30,9 @@ const Search = () => {
         }
     }, [searchInput])
 
+    //search 결과 클릭시 result에 아이템 추가
     const clicked = e => {
         e.preventDefault();
-        
         if(e.target.value !== undefined){
             const new_track = e.target.value.split(",")[0]
             const new_artist = e.target.value.split(",")[1]
@@ -45,6 +47,7 @@ const Search = () => {
         }
     }
 
+    // result결과 클릭시 item 삭제
     const handleRemove = (index) => {
         setItemList(prevItemList => {
             return {
@@ -54,17 +57,27 @@ const Search = () => {
           });
       }
 
-
+    // 추천 받기
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await fetch(`http://localhost:30001/recplaylist/`, {
-            method: 'POST',
-            body: JSON.stringify(itemList['track']),
-            headers: { 'Content-Type': 'application/json' }
-          })
+        if (itemList['track'].length < 5){
+            alert("노래를 5개 이상 골라주세요");
+            setButtonBool(false);
+        }
+        else{
+            setButtonBool(true);
+            const response = await fetch(`http://27.96.130.130:30001/recplaylist/`, {
+                method: 'POST',
+                body: JSON.stringify(itemList['track']),
+                headers: { 'Content-Type': 'application/json' }
+            })
+          
+            await response.json().then((data) => {
+                setResults(data.playlist);
+            });
+        }       
     }
 
-    
 
     return(
         <div id="search_container">
@@ -104,13 +117,14 @@ const Search = () => {
                         ))}
                     </div>
                     <form onSubmit={handleSubmit}>
-                        <div className="submit_btn_div">
-                            <button type='submit' className="submit_button">Get Recommend</button>
+                        <div className="submit_btn" >
+                            <button type='submit' value={buttonBool} className="submit_button">Get Recommend</button>
                         </div>
                     </form>
                     
                 </div>
             </div>
+            <OutputPlayer results={results} />
         </div>
     );
 }

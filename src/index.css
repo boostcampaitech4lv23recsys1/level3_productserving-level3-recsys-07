@@ -835,19 +835,6 @@ img.track {
   flex-direction: column;
 }
 
-/* #handleurl_container .hadleurl_contents{
-  position: relative;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  text-align: center;
-  color: #252121;
-  z-index: 1;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-} */
-
 #handleurl_container .hadleurl_contents h4 {
   color: #33476a;
   margin-bottom: 20px;
@@ -891,6 +878,10 @@ img.track {
   text-align: center;
   color: #252121;
   display: none;
+}
+
+#search_container .search_content {
+  display: flex;
 }
 
 
@@ -971,7 +962,7 @@ img.track {
   background-color: #F5F5F5;
 }
 
-.search_content_output .submit_btn_div{
+.search_content_output .submit_btn{
   width: 500px;
   display: block;
   align-items: center;

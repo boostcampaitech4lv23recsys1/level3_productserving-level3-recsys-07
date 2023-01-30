@@ -221,25 +221,6 @@ $('.back_btn').click(function(){
 											{display: 'block', opacity: 1, scale: 1, ease: Power2.easeInOut}, 0);
 	}
 
-	// Search Page에서 Home으로
-	else if($('#search_container').css('display') !== "none"){
-		var searchToHome = new TimelineMax({});
-
-		// Hide
-		searchToHome.fromTo($('#search_container'), 0.5, {opacity: 1, display: 'flex', x: 0},
-											{opacity: 0, x: 30, display: 'none', ease: Power2.easeInOut}, 0.5);
-
-
-		searchToHome.to($('.back_btn'), 0.5, {display: 'none', opacity: 0, x: 15, ease: Power2.easeInOut}, 0.5);
-		searchToHome.to($('#curator'), 0, {display: 'none', ease: Power2.easeInOut}, 1);
-
-		// Background Up
-		searchToHome.to($('.wave-container'), 1, {yPercent: 0, ease: Power2.easeInOut}, 1);
-
-		// 	Show
-		searchToHome.to($('.text-wrap'), 0.5, {display: 'flex', opacity: 1, y: 0, ease: Power2.easeInOut}, 1.2);		
-	}
-
 	// start_input to Home
 	else if($('#start_input_container').css('display') !== "none"){
 		var startInputToHome = new TimelineMax({});
@@ -261,6 +242,33 @@ $('.back_btn').click(function(){
 											{y: 0, position: 'relative', ease: Power2.easeInOut}, 1.3);
 	}
 
+	// ***** 세부적인 것 부터 위에서 처리 해야 함 *****
+	// url로 추천 받은 결과가 있는 화면에서 back btn을 누를 경우
+	else if($("#handleurl_container .output-player-container").css('display') !== "none"){
+		var recPlaylistUrlTomyPlaylistUrl = new TimelineMax({});
+
+		// Hide
+		recPlaylistUrlTomyPlaylistUrl.to($('.output-player-container'), 0.8, {display: 'none', opacity: 0, scale: 1.1, ease: Power2.easeInOut}, 0);
+
+		// Show
+		recPlaylistUrlTomyPlaylistUrl.fromTo($('#handleurl_container .output_playlist'), 0.5, {opacity: 0, x: 15},
+																{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
+	}	
+
+	
+	// url을 넣은 후 내 플레이리스트가 떠 있는 화면에서 back btn을 누를 경우
+	else if($("#handleurl_container .output_playlist").css('display') !== "none"){
+		var myPlaylistUrlToInputUrl = new TimelineMax({});
+
+		// Hide
+		myPlaylistUrlToInputUrl.to($('#handleurl_container .output_playlist'), 0.8, {display: 'none', opacity: 0, scale: 1.1, ease: Power2.easeInOut}, 0);
+
+		// Show
+		myPlaylistUrlToInputUrl.fromTo($('#handleurl_container .hadleurl_contents'), 0.5, {opacity: 0, x: 15},
+										{display: 'block', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
+	}	
+
+
 	// playlist_url to start_input
 	else if($("#handleurl_container").css('display') !== "none"){
 		var playlistUrlToStartInput = new TimelineMax({});
@@ -277,7 +285,38 @@ $('.back_btn').click(function(){
 		playlistUrlToStartInput.fromTo($('#playlist_select'), 0.8, {opacity: 0, x: 15},
 					{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);			
 	}
-	
+
+	// search 관련
+	// search로 추천 받은 결과가 있는 화면에서 back btn을 누를 경우
+	else if($("#search_container .output-player-container").css('display') !== "none"){
+		var recPlaylistToSearchPlaylist = new TimelineMax({});
+
+		// Hide
+		recPlaylistToSearchPlaylist.to($('.output-player-container'), 0.8, {display: 'none', opacity: 0, scale: 1.1, ease: Power2.easeInOut}, 0);
+
+		// Show
+		recPlaylistToSearchPlaylist.fromTo($('#search_container .search_content'), 0.5, {opacity: 0, x: 15},
+																{display: 'grid', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
+	}
+
+	// Search Page에서 Home으로	
+	else if($("#search_container").css('display') !== "none"){
+		var searchToStartInput = new TimelineMax({});
+
+		// Hide
+		searchToStartInput.to($('#search_container'), 0.8, {display: 'none', opacity: 0, scale: 1.1, ease: Power2.easeInOut}, 0);
+
+		// Show
+		searchToStartInput.to($('#start_input_container'), 0.5, {display: 'flex', opacity: 1, y: 0, ease: Power2.easeInOut}, 1.2);
+
+		searchToStartInput.fromTo($('#playlist_url'), 0.8, {opacity: 0, x: 15},
+					{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
+
+		searchToStartInput.fromTo($('#playlist_select'), 0.8, {opacity: 0, x: 15},
+					{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);			
+	}
+
+
 	// From Main(2) to Home(1)
 	else{
 		var mainToHome = new TimelineMax({});
@@ -305,18 +344,16 @@ $('.back_btn').click(function(){
 	}
 });
 
-
+// ***** NAV Bar를 통해서 이동 되는 경우 모든 container들을 hide 시키는 작업 해줘야 함 *****
 // ===== Home Page Click =====
 $("#home_page").click(function(){
-
 	$('#search_container').hide();
 	$('#start_input_container').hide();
 	$('#handleurl_container').hide()
 	$('#select_container').hide()
 	$('#curator').hide()
 	$('.back_btn').hide()
-
-
+	$('.output-player-container').hide();
 
 	var mainToHome = new TimelineMax({});
 	// Hide
@@ -351,35 +388,6 @@ $("#home_page").click(function(){
 		
 });
 
-// ===== Search page  =====
-$('#playlist_select').click(function(){
-	$('#handleurl_container').hide();
-	$('#start_input_container').hide();
-	$("#search_container").hide();
-	$('#select_container').hide();
-	$('#curator').hide();
-
-	var mainToSearch = new TimelineMax({});
-
-	// Hide
-	mainToSearch.to($('.text-wrap'), 0.5, {display: 'none', opacity: 0, y: -20, ease: Power2.easeInOut}, 0);
-	
-	// Background down
-	mainToSearch.to($('.wave-container'), 1, {yPercent: 30, ease: Power2.easeInOut}, 0);	
-
-	TweenMax.to(".dim", 0.5, {opacity: 0, display: 'none', ease: Power2.easeInOut});
-	TweenMax.to(".nav", 0.5, {xPercent: -100, display:'none', ease: Expo.easeOut});
-
-
-	mainToSearch.fromTo($('#search_container'), 0.8, {opacity:0, x: 15},
-		{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
-
-	mainToSearch.fromTo($('.back_btn'), 0.8, {opacity:0, x: 15},
-		{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
-
-})
-
-
 // ===== Start input page for input url and select your own  =====
 // ===== main to input =====
 $("#start_input_page").click(function(){
@@ -387,6 +395,7 @@ $("#start_input_page").click(function(){
 	$("#search_container").hide()
 	$('#select_container').hide()
 	$('#curator').hide()
+	$('.output-player-container').hide();
 
 	var mainToInput = new TimelineMax({});
  
@@ -430,8 +439,6 @@ $("#playlist_url").click(function(){
 
 // ===== Playlist_url에서 Playlist page
 $(".hadleurl_contents .submit_button").click(function(){
-	// $('.output_playlist').hide();
-	// $('.output_playlist').css('display', 'none')
 	var urlStartToGetPlayList = new TimelineMax({});
 
 	// Hide
@@ -444,36 +451,48 @@ $(".hadleurl_contents .submit_button").click(function(){
 })
 
 // ===== URL에서 start누른 후 나의 Playlist에서 추천 받은 Playlist page로 전환
-$(".output_playlist .submit_button").click(function(){
+$("#handleurl_container .output_playlist .submit_button").click(function(){
 	var urlStartToGetRecPlayList = new TimelineMax({});
 
 	// Hide
-	$('.output_playlist').hide();
-	$('.output-player-container').css('display', 'flex');
+	$('.output_playlist').css('display','none');
+	// $('.output-player-container').css('display', 'flex');
 
-	// // Show
-	// urlStartToGetRecPlayList.fromTo($('.recommand_result_playlist'), 0.8, {opacity: 0, x: 30},
-	// 	{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 0.5);	
+	//Show
+	urlStartToGetRecPlayList.fromTo($('.output-player-container'), 0.8, {opacity: 0, x: 30},
+		{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 0.5);	
+
+	urlStartToGetRecPlayList.fromTo($('.recommand_result_playlist'), 0.8, {opacity: 0, x: 30},
+		{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 0.5);	
 })
 
+// Select Your Own을 클릭할 경우
+// ===== Input page to Search page  =====
+$('#playlist_select').click(function(){
+	$('#start_input_container').hide();
 
+	var mainToSearch = new TimelineMax({});
 
-// $("#playlist_select").click(function(){
-// 	$('#start_input_container').hide();
-// 	$('#select_container').css('display', 'flex');
-// });
+	// show
+	mainToSearch.fromTo($('#search_container'), 0.5, {opacity:0, x: 15},
+		{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
 
-
-// select에서 playlist를 가져오기 위한 버튼 클릭
-$(".submit-playlist").click(function(){
-	$('#select_container').hide();
-	$('#playList').css('display', 'flex');
+	mainToSearch.fromTo($('.back_btn'), 0.5, {opacity:0, x: 15},
+		{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 1);
 })
 
+// ===== Search page to Result Output  =====
+$('.search_content_output .submit_button').click(function(){
+	// 클릭이 됐을 때 5곡 이상의 경우에만 받아와야 하는데 다른 방법을 쓰기엔 설치해야 되는게 있어보여서
+	// 0.3초의 간격으로 true가 설정된 것을 확인 후 실행
+	setTimeout(() => {
+	if ($('.search_content_output .submit_button').val() == "true"){
+		$('.search_content').hide();
+		var searchStartToGetPlayList = new TimelineMax({});
 
-// 클래스명 변경
-// ===== Playlist_url에서 Playlist page
-$(".hadleurl_contents .submit_button").click(function(){
-	$('.hadleurl_contents').css('display', 'none')
-	$('.output_playlist').css('display', 'flex');
+		// Show
+		searchStartToGetPlayList.fromTo($('#search_container .output-player-container'), 0.8, {opacity: 0, x: 30},
+			{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 0.5);	
+	}
+	}, 300);
 })

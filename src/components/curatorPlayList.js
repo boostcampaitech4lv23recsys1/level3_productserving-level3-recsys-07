@@ -16,8 +16,6 @@ const CuratorPlayList = ({selectedCurator}) =>{
         src = "https://open.spotify.com/embed/playlist/45iVWyXlQJp87zrwlX1j2M?utm_source=generator";
       }
 
-    console.log("selectedCurator : ", selectedCurator)
-
     return(
         <div className="curator_playlist">
             <div className="playlist_cls">

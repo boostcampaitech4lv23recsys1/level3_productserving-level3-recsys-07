@@ -111,7 +111,7 @@ async def songList(song: str):
             SELECT DISTINCT JSON_OBJECT('track_name', searched_song_name, 'track_id', song_id, 'artist_name', searched_artist_name)
             FROM song_meta 
             WHERE searched_song_name 
-            LIKE '%{song}%'
+            LIKE '{song}%'
             LIMIT 20;
             """
     cursor.execute(sql)
