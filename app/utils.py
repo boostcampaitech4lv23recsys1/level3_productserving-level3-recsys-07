@@ -47,7 +47,7 @@ def set_cloud_database():
     # database cursor
     cursor = conn.cursor()
     
-    return cursor
+    return cursor, conn
 
 
 def set_prename2id(input_names: List[str], prename2id: Dict):
