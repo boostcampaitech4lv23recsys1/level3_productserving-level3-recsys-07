@@ -1,14 +1,10 @@
 import uvicorn
-import numpy as np
-import pandas as pd
-import re
-
 from fastapi import FastAPI, HTTPException, Request
 from json import JSONDecodeError
 from fastapi.middleware.cors import CORSMiddleware
 from model import EASE, get_model_rec, get_random_rec
 from pydantic import BaseModel, Field
-from typing import List, Union, Optional, Dict, Any
+from typing import List, Dict, Any
 from uuid import UUID, uuid4
 from datetime import datetime
 from utils import set_local_database, set_cloud_database, set_prename2id, set_id2something
@@ -61,7 +57,7 @@ async def receive_items(request: Request):
 
 
 @app.post("/recplaylist", description="추천을 요청합니다.")
-async def make_inference_track(request: Request):
+async def make_inference_track(request: Request, test: List):
     global headers
     print("request : ", request)
     try:
