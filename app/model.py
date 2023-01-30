@@ -26,7 +26,7 @@ class EASE:
 def get_model_rec(model, input_ids, top_k) -> EASE:
     import pymysql
     """Model을 가져옵니다"""
-    train = pd.read_csv("/opt/ml/final/data/train.csv")
+    train = pd.read_csv("../data/train.csv")
     
     users = train['user'].unique()
     items = train['item'].unique()
