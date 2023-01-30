@@ -75,7 +75,6 @@ $('.btn-play').click(function(){
 });
 
 $('.btn-pause').click(function(){
-	console.log('a')
 	TweenMax.to($('.btn-pause'), 0.2, {x: 20, opacity: 0, display: 'none', scale: 0.3, ease: Power2.easeInOut});
 	TweenMax.fromTo($('.btn-play'), 0.2, {x: -20, opacity: 0, scale: 0.3, display: 'none'},
 								{x: 0, opacity: 1, display: 'block', scale: 1, ease: Power2.easeInOut});
@@ -488,11 +487,11 @@ $('.search_content_output .submit_button').click(function(){
 	setTimeout(() => {
 	if ($('.search_content_output .submit_button').val() == "true"){
 		$('.search_content').hide();
-		var searchStartToGetPlayList = new TimelineMax({});
+		// var searchStartToGetPlayList = new TimelineMax({});
 
-		// Show
-		searchStartToGetPlayList.fromTo($('#search_container .output-player-container'), 0.8, {opacity: 0, x: 30},
-			{display: 'flex', opacity: 1, x: 0, ease: Power2.easeInOut}, 0.5);	
+		// // // Show
+		// searchStartToGetPlayList.fromTo($('#search_container .result_output_player_wrapper'), 0.8, {opacity: 0, x: 30},
+		// 	{display: 'grid', opacity: 1, x: 0, ease: Power2.easeInOut}, 0.5);	
 	}
 	}, 300);
 })

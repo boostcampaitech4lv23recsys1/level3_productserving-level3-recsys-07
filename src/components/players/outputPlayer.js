@@ -1,19 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 
-const OutputPlayer = ({ results }) => {
+const OutputPlayer = ({ results, goodRec }) => {
   // State to keep track of the playback state
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [currentTrackName, setCurrentTrackName] = useState('');
   const [currentTrackArtist, setCurrentTrackArtist] = useState('');
+  const [currentTrackImgUrl, setCurrentImgUrl] = useState('');
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(new Audio());
 
+  const clickGoodButton = (goodRec) =>{
+    axios.post("http://27.96.130.130:30001/" + "getGood", {
+        good: goodRec
+    })
+}
+
   useEffect(() => {
     if (results.length) {
-      console.log(results[currentTrackIndex].source);
       setAudioSource(results[currentTrackIndex].source);
       setCurrentTrackName(results[currentTrackIndex].name);
       setCurrentTrackArtist(results[currentTrackIndex].artist);
+      setCurrentImgUrl(results[currentTrackIndex].imgurl);
     }
   }, [results, currentTrackIndex]);
 
@@ -28,6 +36,14 @@ const OutputPlayer = ({ results }) => {
     }
   };
 
+  const togglePlayConsist = () => {
+    if (isPlaying) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
+    }    
+  }
+
   // Function to change the source of the audio element
   const setAudioSource = (newSource) => {
     audioRef.current.src = newSource;
@@ -40,6 +56,7 @@ const OutputPlayer = ({ results }) => {
       prevTrackIndex = results.length - 1;
     }
     setCurrentTrackIndex(prevTrackIndex);
+    togglePlayConsist();
   };
 
   const nextTrack = () => {
@@ -48,7 +65,17 @@ const OutputPlayer = ({ results }) => {
       nextTrackIndex = 0;
     }
     setCurrentTrackIndex(nextTrackIndex);
+    togglePlayConsist()
   };
+
+  const clickTrack = (index) => {
+    let curTrackIndex = index;
+    setCurrentTrackIndex(curTrackIndex);
+    audioRef.current.play();
+    setIsPlaying(true);
+  };
+
+  
 
   //...
   return (
@@ -56,12 +83,12 @@ const OutputPlayer = ({ results }) => {
       <div className="output-player" id="output-player">
         <div className="output-playback_wrapper">
           <div className="playback_blur"></div>
-          <div className="playback_thumb"></div>
+          <div className="playback_thumb" style={{backgroundImage: 'url(' + currentTrackImgUrl + ')'}}></div>
 
           <div className="playback_info">
             <div className="title">{currentTrackName}</div>
             <div className="artist">{currentTrackArtist}</div>
-          </div>
+          
 
           <div className="playback_btn_wrapper">
             <i
@@ -89,7 +116,7 @@ const OutputPlayer = ({ results }) => {
             ></i>
           </div>
 
-          <div className="playback_timeline">
+          {/* <div className="playback_timeline">
             <div className="playback_timeline_start-time">00:31</div>
             <div className="playback_timeline_slider">
               <div className="slider_base"></div>
@@ -97,14 +124,15 @@ const OutputPlayer = ({ results }) => {
               <div className="slider_handle"></div>
             </div>
             <div className="playback_timeline_end-time">03:11</div>
+          </div> */}
           </div>
         </div>
 
         <div className="list_wrapper" id="list_wrapper">
           <ul className="list">
-            {results.map((result) => (
-              <li key={(result.name, result.artist)} className="list_item">
-                <div className="thumb"></div>
+            {results.map((result, index) => (
+              <li key={(result.name, result.artist)} className="list_item" onClick={() => clickTrack(index)}>
+                <div className="thumb" style={{backgroundImage: 'url(' + results[index].imgurl + ')'}}></div>
                 <div className="info">
                   <div className="title">{result.name}</div>
                   <div className="artist">{result.artist}</div>
@@ -114,8 +142,10 @@ const OutputPlayer = ({ results }) => {
           </ul>
         </div>
       </div>
+      <button className="submit_button" onClick={() => clickGoodButton(goodRec)}>Good</button>
     </div>
   );
 };
+
 
 export default OutputPlayer;
