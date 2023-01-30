@@ -49,7 +49,7 @@ app.add_middleware(
     allow_headers=["*"],
     )
 
-headers = get_user_access_token_with_scope()
+# headers = get_user_access_token_with_scope()
 
 class Track(BaseModel):
     id: UUID = Field(default_factory=uuid4)
@@ -108,11 +108,11 @@ async def songList(trackList:list):
 @app.post("/searchSong/{song}")
 async def songList(song: str):
     sql = f"""
-            SELECT JSON_OBJECT('track_name', searched_track_name, 'track_id', searched_track_id)
-            FROM test 
-            WHERE searched_track_name 
-            LIKE '%{song}%' 
-            LIMIT 10
+            SELECT DISTINCT JSON_OBJECT('track_name', searched_song_name, 'track_id', song_id, 'artist_name', searched_artist_name)
+            FROM song_meta 
+            WHERE searched_song_name 
+            LIKE '%{song}%'
+            LIMIT 20;
             """
     cursor.execute(sql)
     res = cursor.fetchall()
