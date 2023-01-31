@@ -43,14 +43,14 @@ const Body = (e) => {
           {/* 기초 세팅 */}
           <Header />
           <Navigation />
-          <MiniPlayer />
+          <GoogleButton />
+          {/* <MiniPlayer /> */}
           <div className='dim'></div>
           <Player />
           <Background />
 
           {/* 홈페이지 */}
           <Home />
-          <GoogleButton />
 
           {/* Start Input 페이지 */}
           <Input />
