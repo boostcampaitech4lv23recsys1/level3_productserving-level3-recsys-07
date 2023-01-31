@@ -167,12 +167,6 @@ const Search = () => {
         }
     }, [spotifyRec])
 
-    const clickGoodButton = (good) =>{
-        axios.post("http://27.96.130.130:30001/getGood", {
-            good: good
-        })
-    }
-
 
     return(
         <div id="search_container">
@@ -223,6 +217,7 @@ const Search = () => {
             {loading ? (
                 <div className="loader_wrapper">
                     <div className="loader"/>
+                    <p> 추천 결과를 가져오고 있습니다 </p>
                 </div>
             ) : (
                 <div className="result_output_player_wrapper">

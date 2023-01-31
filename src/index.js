@@ -391,6 +391,7 @@ $("#home_page").click(function(){
 // ===== main to input =====
 $("#start_input_page").click(function(){
 	$('#handleurl_container').hide()
+	$("#start_input_container").hide()
 	$("#search_container").hide()
 	$('#select_container').hide()
 	$('#curator').hide()
