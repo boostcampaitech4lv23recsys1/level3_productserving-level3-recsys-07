@@ -5,13 +5,13 @@ import pandas as pd
 from fastapi import FastAPI, HTTPException, Request
 from json import JSONDecodeError
 from fastapi.middleware.cors import CORSMiddleware
-from model import EASE, get_model_rec, get_random_rec
+from model import EASE, get_model_rec, get_random_rec, load_model_pt
 from pydantic import BaseModel, Field
-from typing import List, Union, Optional, Dict, Any
+from typing import List, Dict, Any
 from uuid import UUID, uuid4
 from datetime import datetime
 from utils import set_local_database, set_cloud_database, set_prename2id, set_id2something
-
+from make_test import make_testfile
 
 
 
@@ -32,6 +32,9 @@ app.add_middleware(
     allow_methods=["*"],    
     allow_headers=["*"],
     )
+
+
+#==== Classes for logging
 
 class Track(BaseModel):
     name: str
@@ -68,7 +71,9 @@ async def make_inference_track(test:List, request: Request):
     
     input_ids = set_prename2id(input_track_names, prename2id)
     
-    model = EASE()
+    # model = EASE()
+    model = load_model_pt()
+    input_ids = make_testfile(input_ids)
     result_ids = get_model_rec(model=model, input_ids=input_ids, top_k=10)
     
     track_info_lists = set_id2something(result_ids, id2track_name, id2artist, id2trackid, id2url, id2imgurl)
