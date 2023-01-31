@@ -1,7 +1,6 @@
 import uvicorn
 import numpy as np
 import pandas as pd
-import re
 
 from fastapi import FastAPI, HTTPException, Request
 from json import JSONDecodeError
@@ -19,10 +18,10 @@ from utils import set_local_database, set_cloud_database, set_prename2id, set_id
 #== Initial Setting
 
 #==== Set database from gpu server local csv on RAM for fast model run
-song_meta_data, prename2id, id2track_name, id2url, id2artist, id2trackid = set_local_database()
+song_meta_data, prename2id, id2track_name, id2url, id2artist, id2trackid, id2imgurl = set_local_database()
 
 #==== Set database from cloud db for search
-cursor = set_cloud_database()
+cursor, conn = set_cloud_database()
 
 #==== Creaat app and CORS setting
 app = FastAPI()
@@ -34,12 +33,12 @@ app.add_middleware(
     allow_headers=["*"],
     )
 
-#==== Classes for logging
 class Track(BaseModel):
     name: str
     artist: str
     track_id: str
     source: str
+    imgurl: str
  
     
 class Playlist(BaseModel):
@@ -61,46 +60,41 @@ async def receive_items(request: Request):
 
 
 @app.post("/recplaylist", description="추천을 요청합니다.")
-async def make_inference_track(request: Request):
-    global headers
-    print("request : ", request)
+async def make_inference_track(test:List, request: Request):
     try:
         input_track_names = await request.json()
     except JSONDecodeError as e:
         raise HTTPException(status_code=400, detail=str(e))
     
-    print("input_track_names : ", input_track_names)
     input_ids = set_prename2id(input_track_names, prename2id)
-    print(input_ids)
     
     model = EASE()
     result_ids = get_model_rec(model=model, input_ids=input_ids, top_k=10)
     
-    track_info_lists = set_id2something(result_ids, id2track_name, id2artist, id2trackid, id2url)
+    track_info_lists = set_id2something(result_ids, id2track_name, id2artist, id2trackid, id2url, id2imgurl)
     
     tracks = []
-    [tracks.append(Track(name=track_name, artist=track_artist, track_id=trackid, source=url)) for track_name, track_artist, trackid, url in track_info_lists]
+    [tracks.append(Track(name=track_name, artist=track_artist, track_id=trackid, source=url, imgurl=imgurl)) for track_name, track_artist, trackid, url, imgurl in track_info_lists]
     
     new_playlist = Playlist(playlist = tracks)
-    print(new_playlist)
     return new_playlist
 
 
 
-# 노래를 클릭으로 받아올 경우 (모델에 들어갈 인풋)
-@app.post("/trackList")
-async def songList(trackList:list):
-    print(trackList)
-    return trackList
+# # 노래를 클릭으로 받아올 경우 (모델에 들어갈 인풋)
+# @app.post("/trackList")
+# async def songList(trackList:list):
+#     print(trackList)
+#     return trackList
 
 
 # search song (노래 검색을 위함)
 @app.post("/searchSong/{song}")
 async def songList(song: str):
     sql = f"""
-            SELECT DISTINCT JSON_OBJECT('track_name', searched_song_name, 'track_id', song_id, 'artist_name', searched_artist_name)
+            SELECT DISTINCT JSON_OBJECT('track_name', song_name, 'track_id', song_id, 'artist_name', searched_artist_name, 'artist_id' , searched_artist_id)
             FROM song_meta 
-            WHERE searched_song_name 
+            WHERE song_name 
             LIKE '{song}%'
             LIMIT 20;
             """
@@ -108,6 +102,23 @@ async def songList(song: str):
     res = cursor.fetchall()
 
     return res
+
+class GoodCntRequest(BaseModel):
+    good: str
+
+@app.post("/getGood")
+async def getGood(data: GoodCntRequest):
+    good = data.good
+    if good not in ["ourRecGood", "spotifyRecGood"]:
+        return {"message": "Invalid column name"}
+
+    sql = f"""
+            UPDATE  goodCnt SET {good} = {good} + 1;
+            """
+    cursor.execute(sql)
+    conn.commit()
+    
+    return {"message": "good count updated"}
 
 
 if __name__=="__main__":

@@ -1,26 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "./header";
 import Navigation from "./nav";
 import MiniPlayer from "./miniPlayer";
 import Player from "./player";
 import Background from "./background"
-
 import Home from "./home";
 import Curator from "./curator";
 // import Search from "./search";
 import Input from "./start_input/input"
 import HandleUrl from "./start_input/handleUrl"
-import Select from "./start_input/select"
+// import Select from "./start_input/select"
 import Search from "./start_input/search";
 
 import CuratorPlayList from "./curatorPlayList";
 import axios from "axios";
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+const Body = (e) => {
+  const [selectedCurator, setSelectedCurator] = useState("")
 
-  const Body = (e) => {
+  const handleCuratorClick = (val) => {
+    setSelectedCurator(val);
+  }
+
   return (
-    <Router>
       <div>
         <header>
           <div>
@@ -50,16 +52,15 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
           <Input />
           <HandleUrl />
           <Search />
-          <Select />
+          {/* <Select /> */}
       
           {/* 큐레이터 전환 */}
-          <Curator />
-          <CuratorPlayList />
+          <Curator onClick={handleCuratorClick}/>
+          <CuratorPlayList selectedCurator={selectedCurator}/>
 
 
          </div>
        </div>
-     </Router>
   );
 };
 
