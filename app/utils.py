@@ -11,7 +11,7 @@ from typing import List, Union, Optional, Dict, Any
     
 def set_local_database():
     
-    song_meta_data = pd.read_csv("../data/song_meta.csv", sep=',', engine="pyarrow")
+    song_meta_data = pd.read_csv("../data/song_meta.csv", sep=';')
     
     prename2id, id2track_name, id2url, id2artist, id2trackid, id2imgurl = {}, {}, {}, {}, {}, {}
     for track_name, url, id, artist, track_id, img_url in zip(song_meta_data.song_name, 
@@ -58,7 +58,6 @@ def set_prename2id(input_names: List[str], prename2id: Dict):
         track_id_list.append(prename2id[pre_track_name])
         
     return track_id_list
-
 
 def set_id2something(input_ids: List[int], 
                      id2track_name: Dict, 

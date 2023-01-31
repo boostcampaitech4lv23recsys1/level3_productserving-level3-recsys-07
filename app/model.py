@@ -75,7 +75,7 @@ def get_model_rec(model, input_ids, top_k):
     final = final.rename(columns = {0:'item'})
     ee = final['item'].apply(lambda x: aa[x])
     final['item'] = ee
-
+    final = final['item'].tolist()
     return final
     # import pymysql
     # """Model을 가져옵니다"""

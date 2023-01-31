@@ -70,12 +70,12 @@ async def make_inference_track(test:List, request: Request):
         raise HTTPException(status_code=400, detail=str(e))
     
     input_ids = set_prename2id(input_track_names, prename2id)
-    
+    print(input_ids)
     # model = EASE()
     model = load_model_pt()
     input_ids = make_testfile(input_ids)
     result_ids = get_model_rec(model=model, input_ids=input_ids, top_k=10)
-    
+    print(result_ids)
     track_info_lists = set_id2something(result_ids, id2track_name, id2artist, id2trackid, id2url, id2imgurl)
     
     tracks = []
