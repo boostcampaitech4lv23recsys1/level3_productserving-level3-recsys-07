@@ -254,6 +254,36 @@ body {
   left: -6vw;
 }
 
+#login_container {
+  color: #252120;
+  position: fixed;
+  height: 32px;
+  right: 2.2vw;
+  top: 2.2vw;
+  z-index: 10;
+  display: block;
+  align-items: center;
+}
+
+.login_container{
+  font-family: "Oswald", sans-serif;
+  display:inline-block;
+}
+
+.login_wrapper{
+  text-align: right;
+}
+
+.loginPasswdDiv{
+display:inline-block;
+}
+
+.loginResult{
+  display:flex;
+}
+
+
+
 #GoogleButton {
   color: #252120;
   position: fixed;
@@ -1254,3 +1284,5 @@ img.track {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+

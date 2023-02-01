@@ -131,7 +131,7 @@ const OutputPlayer = ({ results, goodRec }) => {
         <div className="list_wrapper" id="list_wrapper">
           <ul className="list">
             {results.map((result, index) => (
-              <li key={(result.name, result.artist)} className="list_item" onClick={() => clickTrack(index)}>
+              <li key={(result.name, result.artist, index)} className="list_item" onClick={() => clickTrack(index)}>
                 <div className="thumb" style={{backgroundImage: 'url(' + results[index].imgurl + ')'}}></div>
                 <div className="info">
                   <div className="title">{result.name}</div>

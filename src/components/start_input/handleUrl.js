@@ -3,12 +3,12 @@ import { Credentials } from '../spotifyAPI/Credentials';
 import axios from 'axios';
 import OutputPlayer from '../players/outputPlayer';
 
-const HandleUrl = () => {
+const HandleUrl = (token) => {
 
   // Set initial variable
   const spotify = Credentials();
   const style = 'border-radius:12px';
-  const [token, setToken] = useState('');
+  // const [token, setToken] = useState('');
   const [playlistUrl, setPlaylistUrl] = useState(
     'https://open.spotify.com/playlist/6yS3dqEDGALDpEukkgRlds'
   );
@@ -20,21 +20,6 @@ const HandleUrl = () => {
   const [itemList, setItemList] = useState({track:[], artist:[], track_id:[], artist_id:[]});
   const [spotifyRec, setSpotifyRec] = useState({artist:[], imgurl:[], name:[], source:[], track_id:[]});
 
-  useEffect(() => {
-    axios('https://accounts.spotify.com/api/token', {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization:
-          'Basic ' + btoa(spotify.ClientId + ':' + spotify.ClientSecret),
-      },
-      data: 'grant_type=client_credentials',
-      method: 'POST',
-    }).then((tokenResponse) => {
-      setToken(tokenResponse.data.access_token);
-    });
-  }, [token]);
-
-  
   // Define handle function
   const APIBASE = 'https://api.spotify.com/v1/playlists/';
   const playlistID = playlistUrl.split('/').pop();
@@ -46,7 +31,7 @@ const HandleUrl = () => {
     event.preventDefault();
     await fetch(APIBASE + playlistID + '/tracks', {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token.token}`,
       },
     })
       .then((response) => response.json())
@@ -72,7 +57,11 @@ const HandleUrl = () => {
     const response = await fetch(`http://27.96.130.130:30001/recplaylist/`, {
       method: 'POST',
       body: JSON.stringify(playlistArray),
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'User-Email-Header': window.userEmail,
+        'User-Run-Time': new Date().getTime(),
+      },
     });
 
     await response.json().then((data) => {
@@ -81,6 +70,7 @@ const HandleUrl = () => {
     });
   };
 
+  // 입력 playlist 로딩이 다 끝나면 spotify 추천을 위해 itemlistsetting
   const [itemListSetFinish, setItemListSetFinish] = useState(false);
 
   useEffect(() => {
@@ -101,18 +91,68 @@ const HandleUrl = () => {
           }
       })
       })
-        setItemListSetFinish(true)
+      setItemListSetFinish(true)
     }
   }, [playListItem])
 
+  const [dataCheck, setDataCheck] = useState(false);
+
+  // useEffect(() => {
+  //   if(dataCheck){
+  //     const responseRec = fetch(`http://27.96.130.130:30001/recplaylist/`, {
+  //       method: 'POST',
+  //       body: JSON.stringify(playlistArray),
+  //       headers: { 'Content-Type': 'application/json' },
+  //     });
+  
+  //     responseRec.json().then((data) => {
+  //       setResults(data.playlist);
+  //       setLoading(false);
+  //     });
+  //   }
+  // }, [dataCheck])
+
   useEffect(() => {
-    if(itemListSetFinish){
+    // if(itemListSetFinish){
+      // fetch(`http://27.96.130.130:30001/checkTrackInDB`, {
+      //   method:'POST',
+      //   headers: {'Content-Type': 'application/json', withCredentials:true },
+      //   body: JSON.stringify([...itemList.track])
+      // })
+      // .then((response) => {
+      //   if(response.status === 200){
+      //     setDataCheck(true)
+      //     fetch(`http://27.96.130.130:30001/recplaylist/`, {
+      //         method: 'POST',
+      //         body: JSON.stringify(playlistArray),
+      //         headers: { 'Content-Type': 'application/json' },
+      //       }).then((responseRec) => {
+      //         responseRec.json().then((data) => {
+      //           setResults(data.playlist);
+      //           setLoading(false);
+      //         });
+      //       });
+          // async function recommend(){
+          //   await fetch(`http://27.96.130.130:30001/recplaylist/`, {
+          //     method: 'POST',
+          //     body: JSON.stringify(playlistArray),
+          //     headers: { 'Content-Type': 'application/json' },
+          //   }).then((responseRec) => {
+          //     responseRec.json().then((data) => {
+          //       setResults(data.playlist);
+          //       setLoading(false);
+          //     });
+          //   });
+          
+          // recommend()
+          // }
+      //   }
+      // })
+
       let track_id_str, artist_id_str
   
       track_id_str = itemList.track_id[0];
       artist_id_str = itemList.artist_id[0];
-      console.log("itemList", itemList);
-      console.log("track_id_str , artist_id_str", track_id_str,artist_id_str);
   
       let query = `limit=10&market=kr&seed_artists=${artist_id_str}&seed_genres=kpop&seed_tracks=${track_id_str}`;
       fetch("https://api.spotify.com/v1/recommendations?" + query, {
@@ -120,7 +160,7 @@ const HandleUrl = () => {
           headers: {
               "Accept": "application/json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${token.token}`
           }
       }).then(response => response.json())
       .then(data => data.tracks.map(result => {
@@ -144,7 +184,7 @@ const HandleUrl = () => {
       // back으로 작동시 기존에 남아있는게 있어서 다 끝나면 한번 초기화
       setItemList({track:[], artist:[], track_id:[], artist_id:[]});
       setSpotifyRec({artist:[], imgurl:[], name:[], source:[], track_id:[]});
-    }
+    // }
   }, [itemListSetFinish])
 
 

@@ -3,7 +3,7 @@ import axios from 'axios';
 import OutputPlayer from "../players/outputPlayer";
 import { Credentials } from '../spotifyAPI/Credentials';
 
-const Search = () => {
+const Search = (token) => {
     const [searchInput, setSearchInpput] = useState("");
     const [showTrackList, setShowTrackList] = useState([]);
     const [itemList, setItemList] = useState({track:[], artist:[], track_id:[], artist_id:[]});
@@ -12,26 +12,7 @@ const Search = () => {
     const [buttonBool, setButtonBool] = useState(false);
     const [loading, setLoading] = useState(null);    
 
-    const [token, setToken] = useState('');
     const [spotifyRec, setSpotifyRec] = useState({artist:[], imgurl:[], name:[], source:[], track_id:[]});
-
-    const spotify = Credentials();
-
-
-    useEffect(() => {
-        axios('https://accounts.spotify.com/api/token', {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization:
-              'Basic ' + btoa(spotify.ClientId + ':' + spotify.ClientSecret),
-          },
-          data: 'grant_type=client_credentials',
-          method: 'POST',
-        }).then((tokenResponse) => {
-          setToken(tokenResponse.data.access_token);
-        });
-      }, [token]);
-
 
     useEffect(() => {
         setShowTrackList([]);
@@ -100,7 +81,11 @@ const Search = () => {
             const response = await fetch(`http://27.96.130.130:30001/recplaylist/`, {
                 method: 'POST',
                 body: JSON.stringify(itemList['track']),
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 'Content-Type': 'application/json', 
+                withCredentials:true,
+                'User-Email-Header': window.userEmail,
+                'User-Run-Time': new Date().getTime(),
+            }
             })
           
             await response.json().then((data) => {
@@ -109,9 +94,6 @@ const Search = () => {
             });
 
             let track_id_str, artist_id_str
-
-            // track_id_str = itemList.track_id.join(",");
-            // artist_id_str = itemList.artist_id.join(",");
 
             track_id_str = itemList.track_id[0];
             artist_id_str = itemList.artist_id[0];
@@ -122,7 +104,7 @@ const Search = () => {
                 headers: {
                     "Accept": "application/json",
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token.token}`
                 }
             }).then(response => response.json())
             .then(data => data.tracks.map(result => {
