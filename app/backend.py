@@ -1,17 +1,26 @@
 import uvicorn
-import numpy as np
-import pandas as pd
-
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, Response
+from starlette.types import Message
 from json import JSONDecodeError
 from fastapi.middleware.cors import CORSMiddleware
 from model import EASE, get_model_rec, get_random_rec, load_model_pt
+
 from pydantic import BaseModel, Field
+
 from typing import List, Dict, Any
 from uuid import UUID, uuid4
-from datetime import datetime
 from utils import set_local_database, set_cloud_database, set_prename2id, set_id2something
 from make_test import make_testfile
+
+from mylogger.logger import *
+import datetime
+
+import logging
+from pythonjsonlogger import jsonlogger
+from google.cloud import bigquery
+from google.oauth2 import service_account
+from pythonjsonlogger import jsonlogger
+
 
 
 
@@ -23,8 +32,11 @@ song_meta_data, prename2id, id2track_name, id2url, id2artist, id2trackid, id2img
 #==== Set database from cloud db for search
 cursor, conn = set_cloud_database()
 
-#==== Creaat app and CORS setting
+#==== Create app
 app = FastAPI()
+
+
+#==== CORS setting
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],
@@ -32,6 +44,17 @@ app.add_middleware(
     allow_methods=["*"],    
     allow_headers=["*"],
     )
+
+#==== Set logging
+
+formatter = jsonlogger.JsonFormatter()
+
+logHandler = logging.StreamHandler()
+logHandler.setFormatter(formatter)
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+logger.addHandler(logHandler)
 
 
 #==== Classes for logging
@@ -64,13 +87,16 @@ async def receive_items(request: Request):
 
 @app.post("/recplaylist", description="추천을 요청합니다.")
 async def make_inference_track(test:List, request: Request):
+    
+    user_email = request.headers['user-email-header']
+    input_at = request.headers['user-run-time']
+    
     try:
         input_track_names = await request.json()
     except JSONDecodeError as e:
         raise HTTPException(status_code=400, detail=str(e))
     
     input_ids = set_prename2id(input_track_names, prename2id)
-    print(input_ids)
     # model = EASE()
     model = load_model_pt()
     input_ids = make_testfile(input_ids)
@@ -82,6 +108,14 @@ async def make_inference_track(test:List, request: Request):
     [tracks.append(Track(name=track_name, artist=track_artist, track_id=trackid, source=url, imgurl=imgurl)) for track_name, track_artist, trackid, url, imgurl in track_info_lists]
     
     new_playlist = Playlist(playlist = tracks)
+    
+    logger.info({
+        'user_email': user_email,
+        'input_playlist': input_track_names,
+        'output_at': datetime.datetime.now(),
+        'output_playlist': new_playlist
+        })
+    
     return new_playlist
 
 
