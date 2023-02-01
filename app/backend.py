@@ -12,7 +12,6 @@ from uuid import UUID, uuid4
 from utils import set_local_database, set_cloud_database, set_prename2id, set_id2something
 from make_test import make_testfile
 
-from mylogger.logger import *
 import datetime
 
 import logging
@@ -109,29 +108,14 @@ async def make_inference_track(test:List, request: Request):
     
     new_playlist = Playlist(playlist = tracks)
     
-    logger.info({
-        'user_email': user_email,
-        'input_playlist': input_track_names,
-        'output_at': datetime.datetime.now(),
-        'output_playlist': new_playlist
-        })
-    
     return new_playlist
-
-
-
-# # 노래를 클릭으로 받아올 경우 (모델에 들어갈 인풋)
-# @app.post("/trackList")
-# async def songList(trackList:list):
-#     print(trackList)
-#     return trackList
 
 
 # search song (노래 검색을 위함)
 @app.post("/searchSong/{song}")
 async def songList(song: str):
     sql = f"""
-            SELECT DISTINCT JSON_OBJECT('track_name', song_name, 'track_id', song_id, 'artist_name', searched_artist_name, 'artist_id' , searched_artist_id)
+            SELECT DISTINCT JSON_OBJECT('track_name', song_name, 'track_id', searched_song_id, 'artist_name', searched_artist_name, 'artist_id' , searched_artist_id)
             FROM song_meta 
             WHERE song_name 
             LIKE '{song}%'
@@ -159,6 +143,40 @@ async def getGood(data: GoodCntRequest):
     
     return {"message": "good count updated"}
 
+
+class loginInput(BaseModel):
+    login: str
+    passwd: str
+
+@app.post("/login")
+async def login(data: loginInput):
+    sql = f"""
+            select EXISTS (select user_id from login where user_id='{data.login}' limit 1) as success;
+            """
+    cursor.execute(sql)
+    res = cursor.fetchone()[0]
+
+    if res == 1:
+        sql = f"""select EXISTS 
+                    (select user_id from login where user_id='{data.login}' and user_passwd='{data.passwd}' limit 1)
+                    as success"""
+        cursor.execute(sql)
+        res = cursor.fetchone()[0]
+
+        if res == 1:
+            return True
+        else:
+            raise HTTPException(status_code=400, detail=str("password not correct"))
+    else:
+        sql = f"""
+            INSERT INTO login VALUES('{data.login}','{data.passwd}')
+            """
+        cursor.execute(sql)
+        conn.commit()
+
+        return True
+    
+    
 
 if __name__=="__main__":
     uvicorn.run("backend:app", host="0.0.0.0", port=30001, reload=True)
