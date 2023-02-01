@@ -23,6 +23,8 @@ const Body = (e) => {
     setSelectedCurator(val);
   }
 
+  window.userEmail = 'NOT_LOGINED'
+
   return (
       <div>
         <header>

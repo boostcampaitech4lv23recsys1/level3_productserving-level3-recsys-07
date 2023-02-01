@@ -69,10 +69,14 @@ const HandleUrl = () => {
         setSrc(['https://open.spotify.com/embed/playlist/' + playlistID]);
       });
 
-    const response = await fetch(`http://27.96.130.130:30001/recplaylist/`, {
+    const response = await fetch(`http://49.50.172.166:30001/recplaylist/`, {
       method: 'POST',
       body: JSON.stringify(playlistArray),
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'User-Email-Header': window.userEmail,
+        'User-Run-Time': new Date().getTime(),
+     },
     });
 
     await response.json().then((data) => {
