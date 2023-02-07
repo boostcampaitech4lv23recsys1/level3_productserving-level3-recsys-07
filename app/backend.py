@@ -1,26 +1,16 @@
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request, Response
-from starlette.types import Message
 from json import JSONDecodeError
 from fastapi.middleware.cors import CORSMiddleware
-from model import EASE, get_model_rec, get_random_rec, load_model_pt
+from model import EASE, get_model_rec, load_model_pt
 
 from pydantic import BaseModel, Field
 
-from typing import List, Dict, Any
+from typing import List, Dict
 from uuid import UUID, uuid4
-from utils import set_local_database, set_cloud_database, set_prename2id, set_id2something
+from utils import set_local_database, set_cloud_database, set_prename2id, set_id2something, insert_data_into_bigquery
 from make_test import make_testfile
-
-from mylogger.logger import *
 import datetime
-
-import logging
-from pythonjsonlogger import jsonlogger
-from google.cloud import bigquery
-from google.oauth2 import service_account
-from pythonjsonlogger import jsonlogger
-
 
 
 
@@ -45,18 +35,6 @@ app.add_middleware(
     allow_headers=["*"],
     )
 
-#==== Set logging
-
-formatter = jsonlogger.JsonFormatter()
-
-logHandler = logging.StreamHandler()
-logHandler.setFormatter(formatter)
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-logger.addHandler(logHandler)
-
-
 #==== Classes for logging
 
 class Track(BaseModel):
@@ -69,7 +47,7 @@ class Track(BaseModel):
     
 class Playlist(BaseModel):
     id: UUID = Field(default_factory=uuid4)
-    playlist: List[Track] = Field(default_factory=list)
+    playlist: List[Dict]
 
 
 #== Baceknd Codes
@@ -89,7 +67,7 @@ async def receive_items(request: Request):
 async def make_inference_track(test:List, request: Request):
     
     user_email = request.headers['user-email-header']
-    input_at = request.headers['user-run-time']
+    input_at = datetime.datetime.now()
     
     try:
         input_track_names = await request.json()
@@ -101,20 +79,20 @@ async def make_inference_track(test:List, request: Request):
     model = load_model_pt()
     input_ids = make_testfile(input_ids)
     result_ids = get_model_rec(model=model, input_ids=input_ids, top_k=10)
-    print(result_ids)
+
     track_info_lists = set_id2something(result_ids, id2track_name, id2artist, id2trackid, id2url, id2imgurl)
     
     tracks = []
     [tracks.append(Track(name=track_name, artist=track_artist, track_id=trackid, source=url, imgurl=imgurl)) for track_name, track_artist, trackid, url, imgurl in track_info_lists]
     
+    output_tracks = [track_name for track_name, _, _, _, _ in track_info_lists]
+    
     new_playlist = Playlist(playlist = tracks)
     
-    logger.info({
-        'user_email': user_email,
-        'input_playlist': input_track_names,
-        'output_at': datetime.datetime.now(),
-        'output_playlist': new_playlist
-        })
+    output_at = datetime.datetime.now()
+    print(f'user_email: {user_email}')
+    print(f'user_email: {type(user_email)}')
+    insert_data_into_bigquery(user_email, input_at, str(input_track_names), output_at, str(output_tracks))
     
     return new_playlist
 
@@ -131,7 +109,7 @@ async def make_inference_track(test:List, request: Request):
 @app.post("/searchSong/{song}")
 async def songList(song: str):
     sql = f"""
-            SELECT DISTINCT JSON_OBJECT('track_name', song_name, 'track_id', song_id, 'artist_name', searched_artist_name, 'artist_id' , searched_artist_id)
+            SELECT DISTINCT JSON_OBJECT('track_name', song_name, 'track_id', searched_song_id, 'artist_name', searched_artist_name, 'artist_id' , searched_artist_id)
             FROM song_meta 
             WHERE song_name 
             LIKE '{song}%'

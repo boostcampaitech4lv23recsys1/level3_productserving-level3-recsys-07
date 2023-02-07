@@ -45,7 +45,7 @@ class MultiVAE(nn.Module):
         for i, layer in enumerate(self.q_layers):
             h = layer(h)
             if i != len(self.q_layers) - 1:
-                h = F.tanh(h)
+                h = torch.tanh(h)
             else:
                 mu = h[:, :self.q_dims[-1]]
                 logvar = h[:, self.q_dims[-1]:]
@@ -64,7 +64,7 @@ class MultiVAE(nn.Module):
         for i, layer in enumerate(self.p_layers):
             h = layer(h)
             if i != len(self.p_layers) - 1:
-                h = F.tanh(h)
+                h = torch.tanh(h)
         return h
 
     def init_weights(self):
