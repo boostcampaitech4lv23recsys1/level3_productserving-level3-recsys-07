@@ -3,7 +3,8 @@ import numpy as np
 import pandas as pd
 import pickle
 from datasets import MultiVAEDataLoader
-
+import sklearn
+import joblib
 import bottleneck as bn
 
 device = torch.device("cuda")
@@ -28,9 +29,13 @@ class EASE:
     def forward(self, user_row):
         return user_row @ self.B
 
-def load_model_pt():
+def load_model_vae_pt():
     with open('../data/vae.pt', 'rb') as f:
         model = torch.load(f)
+    return model
+
+def load_model_lgbm_pt():
+    model = joblib.load('lgb.pkl')
     return model
 
 def naive_sparse2tensor(data):
@@ -77,6 +82,20 @@ def get_model_rec(model, input_ids, top_k):
     final['item'] = ee
 
     return final
+
+def get_model_rec_lgbm(model, test_file, train, input_ids, top_k):
+    model = model
+    # train = train 배치에서 돌린 train의 아이템 리스트
+    total_preds = model.predict(test_file)
+    submission = pd.DataFrame()
+    submission['item'] = test_file['id']#song meta id 붙여줘야함
+    submission['pred'] = total_preds
+    total_input = train + input_ids
+    submission = submission[~submission['item'].isin(total_input)]
+    submission = submission.sort_values('pred', ascending=False)[:top_k]
+    return submission['item'].tolist()
+
+
     # import pymysql
     # """Model을 가져옵니다"""
     # train = pd.read_csv("../data/230130_train_cri50.csv")
