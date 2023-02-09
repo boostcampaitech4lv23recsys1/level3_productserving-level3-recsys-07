@@ -9,6 +9,7 @@ from uuid import UUID, uuid4
 from datetime import datetime
 from utils import set_local_database, set_cloud_database, set_prename2id, set_id2something
 from make_test import make_testfile, make_testfile_lgbm
+from collections import Counter
 
 
 
@@ -90,17 +91,14 @@ async def make_inference_track(request: Request, test: List):
     result_popularity = get_model_pop()
 
     #보팅
-    def mode(list):
-        count = 0
-        mode = 0;
-        for x in list: 
-            if list.count(x) > count:
-                count = list.count(x)
-                mode = x
+    def voting(candidate):
+        vote_cnt = sorted(Counter(candidate).items(), key=lambda x: -x[1])
+        result = [i[0] for i in vote_cnt]
 
-        return mode
+        return result
 
-    result_ids = mode(result_ids + result_ids_lgbm + result_ids_chord + result_popularity)
+    
+    result_ids = voting(result_ids + result_ids_lgbm + result_ids_chord + result_popularity)
 
     track_info_lists = set_id2something(result_ids, id2track_name, id2artist, id2trackid, id2url)
     
