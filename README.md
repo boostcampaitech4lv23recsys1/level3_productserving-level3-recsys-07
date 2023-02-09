@@ -1,11 +1,5 @@
 ## 프로젝트 개요
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/40c413d6-1bdd-40c9-b2e2-77a7b4ec239f/Untitled.png)
-
-- Spotify, Youtube Music등 기존 음원 플랫폼은 **음악 외적인 요소**가 중심이 된 추천.
-- **음원 데이터** 자체를 통한 음악 추천에 도전.
-- 추천 결과의 **미리 듣기** 함께 제공하는 서비스.
-
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4bbdd500-5998-4711-bf60-c8a6a3900691/Untitled.png)
+![image](https://user-images.githubusercontent.com/53855943/217695640-d8089f02-37ae-4f24-b43a-fb32a2bf87f1.png)
 
 - Mel-Spectrogram을 분석하여 spotify에서 제공하지 않는 음악 자체의 특징을 추출
 
