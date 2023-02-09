@@ -6,6 +6,7 @@ from datasets import MultiVAEDataLoader
 import sklearn
 import joblib
 import bottleneck as bn
+from collections import Counter
 
 device = torch.device("cuda")
 
@@ -162,6 +163,22 @@ def get_model_rec_lgbm(model, test_file, train, input_ids, top_k):
     # result[Y.nonzero()] = np.inf  # 이미 어떤 한 유저가 클릭 또는 구매한 아이템 이력은 제외
     # result = result.argsort()[:,:top_k]
     # result = [id2item[i] for i in result[0]]
+
+
+def get_model_rec_chord(input_ids):
+    with open('chord_rule_base.pickle', 'rb') as fr:
+        chord_dict = pickle.load(fr)
+    
+    result = [chord_dict[key] for key in input_ids if key in chord_dict]
+    return result
+    
+
+def get_model_pop():
+    df = pd.read_csv("arena_data/230203_train_cri3.csv")
+    song_meta = pd.read_json("arena_data/230204_meta_cri3.json")
+    pop_idx = np.array(sorted(Counter(df["song"]).items(), key=lambda x: -x[1]))[:,0][:100]
+    result = song_meta[song_meta["song_id"].isin(pop_idx)].sample(10)["song_id"]
+    return result.tolist()
 
 
 def get_random_rec(top_k):

@@ -2,7 +2,7 @@ import uvicorn
 from fastapi import FastAPI, HTTPException, Request
 from json import JSONDecodeError
 from fastapi.middleware.cors import CORSMiddleware
-from model import EASE, get_model_rec, get_random_rec, load_model_vae_pt, load_model_lgbm_pt, get_model_rec_lgbm
+from model import EASE, get_model_rec, get_random_rec, load_model_vae_pt, load_model_lgbm_pt, get_model_rec_lgbm, get_model_rec_chord, get_model_pop
 from pydantic import BaseModel, Field
 from typing import List, Dict, Any
 from uuid import UUID, uuid4
@@ -83,6 +83,12 @@ async def make_inference_track(request: Request, test: List):
     train = []
     result_ids_lgbm = get_model_rec_lgbm(model=model, test_file=test_file, train = train, input_ids = input_ids, top_k=10)
 
+    # 코드 유사도
+    result_ids_chord = get_model_rec_chord(input_ids=input_ids)
+
+    # 인기도 기반
+    result_popularity = get_model_pop()
+
     #보팅
     def mode(list):
         count = 0
@@ -94,7 +100,7 @@ async def make_inference_track(request: Request, test: List):
 
         return mode
 
-    result_ids = mode([result_ids, result_ids_lgbm])
+    result_ids = mode(result_ids + result_ids_lgbm + result_ids_chord + result_popularity)
 
     track_info_lists = set_id2something(result_ids, id2track_name, id2artist, id2trackid, id2url)
     
