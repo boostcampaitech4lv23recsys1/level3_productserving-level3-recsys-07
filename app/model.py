@@ -35,7 +35,7 @@ def load_model_vae_pt():
     return model
 
 def load_model_lgbm_pt():
-    model = joblib.load('lgb.pkl')
+    model = joblib.load('../data/lgb.pkl')
     return model
 
 def naive_sparse2tensor(data):
