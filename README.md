@@ -1,31 +1,20 @@
-# Create React App
+## 프로젝트 개요
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/40c413d6-1bdd-40c9-b2e2-77a7b4ec239f/Untitled.png)
 
-This directory is a brief example of a [Create React App](https://github.com/facebook/create-react-app) site that can be deployed to Vercel with zero configuration.
+- Spotify, Youtube Music등 기존 음원 플랫폼은 **음악 외적인 요소**가 중심이 된 추천.
+- **음원 데이터** 자체를 통한 음악 추천에 도전.
+- 추천 결과의 **미리 듣기** 함께 제공하는 서비스.
 
-## Deploy Your Own
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4bbdd500-5998-4711-bf60-c8a6a3900691/Untitled.png)
 
-Deploy your own Create React App project with Vercel.
+- Mel-Spectrogram을 분석하여 spotify에서 제공하지 않는 음악 자체의 특징을 추출
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/vercel/tree/main/examples/create-react-app&template=create-react-app)
 
-_Live Example: https://create-react-template.vercel.app/_
 
-## Available Scripts
+## Service Architecture
 
-In the project directory, you can run:
+![아키텍처.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6229285b-9445-4342-baab-0090d1d922cb/%E1%84%8B%E1%85%A1%E1%84%8F%E1%85%B5%E1%84%90%E1%85%A6%E1%86%A8%E1%84%8E%E1%85%A5.png)
 
-### `npm start`
 
-Runs the app in the development mode. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes. You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode. See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.
-
-It correctly bundles React in production mode and optimizes the build for the best performance. The build is minified and the filenames include the hashes.
+# 시연 영상 결과
