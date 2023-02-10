@@ -1,12 +1,14 @@
-# import requests
 import pandas as pd
 import pymysql 
-# import undetected_chromedriver as uc
 import re
-# from selenium.webdriver.common.by import By
-# from selenium import webdriver
 from urllib.parse import urlencode
 from typing import List, Union, Optional, Dict, Any
+from datetime import datetime
+import json
+import logging.config
+from google.cloud import bigquery
+from google.oauth2 import service_account
+from pydantic import BaseModel
     
     
 def set_local_database():
@@ -21,7 +23,7 @@ def set_local_database():
                                            song_meta_data.searched_song_id,
                                            song_meta_data.img_url):
         
-        prename = re.sub("[^\w]", '', track_name).strip().lower()
+        prename = re.sub("[^\w]", '', track_name).strip()
         prename2id[prename] = id
         id2track_name[id] = track_name 
         id2url[id] = url
@@ -80,3 +82,35 @@ def set_id2something(input_ids: List[int],
 
 
 
+#=== Set bigquey
+credentials = service_account.Credentials.from_service_account_file(
+        filename='/opt/ml/final/app/crendential/test-376013-da9a93e1349a.json'
+    )
+bigquery_client = bigquery.Client(credentials=credentials)
+table_ref = bigquery_client.dataset('onlie_serving_logs').table('batch')
+table = bigquery_client.get_table(table_ref)
+
+
+class BigqueryLogSchema(BaseModel):
+    user_email: str
+    input_at: datetime
+    input_playlist: str
+    output_at:datetime
+    output_playlist: str
+    
+    
+
+#===  Define the function to insert data into BigQuery
+def insert_data_into_bigquery(user_email, input_at, input_playlist, output_at, output_playlist):
+
+    log_input = BigqueryLogSchema(
+            user_email=user_email,
+            input_at=input_at,
+            input_playlist=input_playlist,
+            output_at=output_at,
+            output_playlist=output_playlist,
+        )
+    errors = bigquery_client.insert_rows_json(table, [json.loads(log_input.json())])
+
+    if errors:
+        logging.error(errors)
