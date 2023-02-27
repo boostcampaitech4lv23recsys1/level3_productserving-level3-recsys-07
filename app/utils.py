@@ -158,8 +158,8 @@ def set_cloud_database():
         host='database-2.csf4gv44uzg9.ap-northeast-2.rds.amazonaws.com',
         port=3306,
         charset='utf8',
-        user='admin',
-        passwd='wjdtmddus1!',
+        user='',
+        passwd='',
         db='test_final'
     )
     
