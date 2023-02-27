@@ -1,31 +1,26 @@
-# Create React App
+## 프로젝트 개요
+![image](https://user-images.githubusercontent.com/53855943/217695640-d8089f02-37ae-4f24-b43a-fb32a2bf87f1.png)
 
-This directory is a brief example of a [Create React App](https://github.com/facebook/create-react-app) site that can be deployed to Vercel with zero configuration.
+- Mel-Spectrogram을 분석하여 spotify에서 제공하지 않는 음악 자체의 특징을 추출
+<br/><br/><br/><br/><br/>
 
-## Deploy Your Own
+## 프로젝트 목표
+![image](https://user-images.githubusercontent.com/53855943/217695912-dfaa1b7c-b699-425d-8de8-4d04b6c7631d.png)
+- 첫번째 목표는 비정형 데이터인 소리 데이터를 직접 확용해 유의미한 Feature를 만들고 해당 데이터를 직접 모델에 활용 하는 것입니다.
 
-Deploy your own Create React App project with Vercel.
+- 두번째 목표는 실제 서비스를 통해 트래픽을 받고 유저의 로깅 데이터를 활용해 유의미한 서비스 품질을 개선 하는 것 입니다.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/vercel/tree/main/examples/create-react-app&template=create-react-app)
+- 세번째 목표는 Spotify 추천 결과와 저희 AIMr의 추천 결과를 비교해서 더 긍정적인 평가를 받는 것입니다.
+<br/><br/><br/><br/><br/>
 
-_Live Example: https://create-react-template.vercel.app/_
 
-## Available Scripts
+## Service Architecture
+![image](https://user-images.githubusercontent.com/53855943/217695888-205f7172-3e2a-4c05-b641-92ae35ade10a.png)
+<br/><br/><br/><br/><br/>
 
-In the project directory, you can run:
 
-### `npm start`
+## 시연 영상 결과
+![캡처](https://user-images.githubusercontent.com/53855943/217696042-e76ecb54-f855-438c-a53b-f5636dec4846.PNG)
 
-Runs the app in the development mode. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes. You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode. See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.
-
-It correctly bundles React in production mode and optimizes the build for the best performance. The build is minified and the filenames include the hashes.
+영상 링크 https://www.youtube.com/watch?v=pyDpSvMvzBE
